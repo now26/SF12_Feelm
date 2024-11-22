@@ -123,32 +123,54 @@ class LoginSerializer(serializers.Serializer):
         }
         
 # 회원 정보 변경
-# class UserSerializer(serializers.ModelSerializer):
-#     # 원래 비밀번호 확인할 필드
-#     password1 = serializers.CharField(max_length=128, min_length=8, write_only=True)
-#     # 새롭게 정의할 비밀번호와 비밀번호 확인
-#     password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
-#     password3 = serializers.CharField(max_length=128, min_length=8, write_only=True)
-#     class Meta:
-#         model = User
-#         fields = (
-#             'nickname',
-#             'profile_image',
-#             'password',
-#             'age',
-#             'gener',
-#             'token',
-#         )
-#         read_only_fields = ('token',)
+class UserSerializer(serializers.ModelSerializer):
+    # 원래 비밀번호 확인할 필드
+    password1 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    # 새롭게 정의할 비밀번호와 비밀번호 확인
+    password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    password3 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+    class Meta:
+        model = User
+        fields = (
+            'nickname',
+            'profile_image',
+            'password1',
+            'password2',
+            'password3',
+            'age',
+            'gender',
+            # 'token',
+        )
+        read_only_fields = ('token',)
     
-#     def update(self, instance, validated_data):
-#         password1 = validated_data.pop('password1', None)
-#         if password1 != 유저의 원래 비밀번호:
-#             return serializers.ValidationError('비밀번호가 틀렸습니다.')
-#         password2 = validated_data.pop('password2', None)
-#         password3 = validated_data.pop('password3', None)
-#         if password2 != password3:
-#             return serializers.ValidationError('비밀번호가 다릅니다.')
+    def update(self, instance, validated_data):
+        password1 = validated_data.pop('password1', None)
+        password2 = validated_data.pop('password2', None)
+        password3 = validated_data.pop('password3', None)
+        # if password1 != 유저의 원래 비밀번호:
+        #     return serializers.ValidationError('비밀번호가 틀렸습니다.')
+        # if password2 != password3:
+        #     return serializers.ValidationError('비밀번호가 다릅니다.')
+        
+        # 현재 비밀번호 확인
+        if not instance.check_password(password1):
+            raise serializers.ValidationError('비밀번호가 틀렸습니다.')
+        
+        # 새 비밀번호 일치 확인
+        if password2 != password3:
+            raise serializers.ValidationError('비밀번호가 일치하지 않습니다.')
+        
+        # 새 비밀번호가 제공된 경우 업데이트
+        if password2:
+            instance.set_password(password2)
+        
+        # 다른 필드 업데이트
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        
+        instance.save()
+        return instance
+
         
 # 일기 
 class DiaryListSerializer(serializers.ModelSerializer):

@@ -10,9 +10,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import RetrieveUpdateAPIView
 
 from .models import User, Diary
-from .serializers import SignupSerializer, LoginSerializer, UserInfoSerializer, DiarySerializer, DiaryListSerializer
+from .serializers import SignupSerializer, LoginSerializer, UserInfoSerializer, DiarySerializer, DiaryListSerializer, UserSerializer
 from .renders import UserJSONRenderer
 
 from movies.models import Movie, Review
@@ -77,15 +78,42 @@ class LogoutView(APIView):
             logout(request)
             return Response({'message':'로그아웃 완료'}, status=status.HTTP_202_ACCEPTED)
 
+# 회원정보 변경
+class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+    
+    def get(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def patch(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        
+# 회원탈퇴
+# @api_view(['POST'])
+# @login_required
+# def delete(request):
+#     user = request.user
+#     if request.method == 'POST':
+#         user.delete()
+#         return Response({'message':'탈퇴 성공'}, status=status.HTTP_202_ACCEPTED)
+        
 
-### 마이페이지
-@api_view(['GET'])
+### 마이페이지, 회원 정보 조회, 회원 탈퇴
+@api_view(['GET', 'DELETE'])
 @login_required
 def mypage(request):
     user = request.user
     if request.method == 'GET':
         serializer = UserInfoSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response({'message':'탈퇴 성공'}, status=status.HTTP_202_ACCEPTED)
     
 # 일기 목록, 작성
 @api_view(['GET', 'POST'])
