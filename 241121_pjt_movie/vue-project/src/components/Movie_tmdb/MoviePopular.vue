@@ -11,7 +11,7 @@ const movieStore = useMovieStore()
 
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
 onMounted(() => {
-  movieStore.getMoviePopular(movieStore.currentPage)
+  movieStore.getMoviePopular(movieStore.po_currentPage)
 })
 
 const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
@@ -34,8 +34,8 @@ const getBackDrop = (backDropPath, imageSize) => {
 }
 
 const movies = computed(() => movieStore.movie_popular)
-const currentPage = computed(() => movieStore.currentPage)
-const totalPages = computed(() => movieStore.totalPages)
+const currentPage = computed(() => movieStore.po_currentPage)
+const totalPages = computed(() => movieStore.po_totalPages)
 // console.log(movies)
 
 </script>

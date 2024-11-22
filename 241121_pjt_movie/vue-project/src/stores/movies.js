@@ -20,14 +20,9 @@ export const useMovieStore = defineStore('movies', () => {
   const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN
   // console.log(import.meta.env.VITE_TMDB_TOKEN)
 
+
+
   const movies_db = ref([])
-
-
-  // TMDB - movie_popular
-  const movie_popular = ref([]) // 인기 영화 목록
-  const currentPage = ref(1) // 현재 페이지 번호
-  const totalPages = ref(0) // 전체 페이지 수
-
 
   const getMovies = function() {
     // 토큰 전달 test
@@ -50,6 +45,11 @@ export const useMovieStore = defineStore('movies', () => {
     })
   }
 
+  // TMDB - movie_popular
+  const movie_popular = ref([]) // 인기 영화 목록
+  const po_currentPage = ref(1) // 현재 페이지 번호
+  const po_totalPages = ref(0) // 전체 페이지 수
+
   const getMoviePopular = async function(pageNum = 1) {
     try {
       // 비동기 요청을 기다림
@@ -71,8 +71,48 @@ export const useMovieStore = defineStore('movies', () => {
   
       // 응답 받은 데이터를 상태에 반영
       movie_popular.value = response.data.results;
-      currentPage.value = pageNum;
-      totalPages.value = response.data.total_pages;
+      po_currentPage.value = pageNum;
+      po_totalPages.value = response.data.total_pages;
+    } catch (err) {
+      console.error('Error fetching popular movies:', err);
+    }
+  };
+
+
+  // TMDB - movie_now_playing
+  const movie_nowPlaying = ref([]) // 인기 영화 목록
+  const np_currentPage = ref(1) // 현재 페이지 번호
+  const np_totalPages = ref(0) // 전체 페이지 수
+
+  const getMovieNowPlaying = async function(pageNum = 1) {
+    try {
+      // 비동기 요청을 기다림
+      const response = await axios({
+        method: 'get',
+        url: `${TMDB_BASE_URL}/3/discover/movie`,
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${TMDB_TOKEN}`,
+        },
+        params: {
+          include_adult: false,
+          include_video: false,
+          language: 'en-US',
+          // language: 'ko-KR',
+          page: pageNum,
+          sort_by: 'popularity.desc',
+          with_release_type: '2|3',
+          // 'release_date.gte': {min_date},
+          // 'release_date.lte': {max_date},
+          'release_date.gte': '2022-11-11',
+          'release_date.lte': '2023-11-11',
+        }
+      });
+  
+      // 응답 받은 데이터를 상태에 반영
+      movie_nowPlaying.value = response.data.results;
+      np_currentPage.value = pageNum;
+      np_totalPages.value = response.data.total_pages;
     } catch (err) {
       console.error('Error fetching popular movies:', err);
     }
@@ -83,11 +123,18 @@ export const useMovieStore = defineStore('movies', () => {
   return {
     DB_BASE_URL,
     movies_db,
+
     movie_popular,
-    currentPage,
-    totalPages,
+    po_currentPage,
+    po_totalPages,
+
+    movie_nowPlaying,
+    np_currentPage,
+    np_totalPages,
+
     getMovies,
-    getMoviePopular
+    getMoviePopular,
+    getMovieNowPlaying
   }
 
 }, { persist: true })

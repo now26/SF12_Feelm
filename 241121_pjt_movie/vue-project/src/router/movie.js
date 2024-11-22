@@ -6,6 +6,7 @@ import MovieDetailView from '@/views/MovieDetailView.vue'
 
 import MovieTmdbView from '@/views/Movie_tmdb/MovieTmdbView.vue'
 import MoviePopularDetailView from '@/views/Movie_tmdb/MoviePopularDetailView.vue'
+import MovieNowPlayingDetailView from '@/views/Movie_tmdb/MovieNowPlayingDetailView.vue'
 
 const movieRouter = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const movieRouter = createRouter({
       path: '/movies/tmdb/popular',
       name: 'MoviePopularDetailView',
       component: MoviePopularDetailView
+    },
+    {
+      path: '/movies/tmdb/now-playing',
+      name: 'MovieNowPlayingDetailView',
+      component: MovieNowPlayingDetailView
     },
   ],
 })

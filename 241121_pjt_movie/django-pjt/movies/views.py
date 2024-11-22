@@ -18,10 +18,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 
-from .serializers import MovieSerializer, MovieListSerializer
-from .models import Movie
-
-
+from .serializers import MovieSerializer, MovieListSerializer, ReviewSerializer
+from .models import Movie, Review
 
 
 # # Create your views here.
@@ -48,13 +46,40 @@ def movie_list(request):
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
     
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def movie_detail(request, tmdb_id):
+    user = request.user
     movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    # review = Review.objects.filter(movie=movie.pk)
     if request.method == 'GET':
         serializer = MovieSerializer(movie)
         print(serializer.data)
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=user, movie=movie)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+# 리뷰 get, post
+# @api_view(['GET', 'POST'])
+# def review(request, tmdb_id):
+#     movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+#     if request.method == 'GET':
+#         pass
+#     elif request.method == 'POST':
+#         pass
+
+
+# @api_view(['GET'])
+# def movie_detail(request, tmdb_id):
+#     user = request.user
+#     movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+#     if request.method == 'GET':
+#         serializer = MovieSerializer(movie)
+#         print(serializer.data)
+#         return Response(serializer.data)
 
 
 # # TMDB API에서 데이터 다운로드 후 출력

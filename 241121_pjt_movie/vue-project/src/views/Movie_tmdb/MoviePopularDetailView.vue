@@ -9,13 +9,13 @@ const movieStore = useMovieStore()
 
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
 onMounted(() => {
-  movieStore.getMoviePopular(movieStore.currentPage)
+  movieStore.getMoviePopular(movieStore.po_currentPage)
 })
 
 // 앞으로 1페이지 이동
 const prev1Page = () => {
-  if (movieStore.currentPage > 1){
-    movieStore.getMoviePopular(movieStore.currentPage - 1) // API 호출
+  if (movieStore.po_currentPage > 1){
+    movieStore.getMoviePopular(movieStore.po_currentPage - 1) // API 호출
   } else {
     alert('첫 번째 페이지 입니다.')
   }
@@ -23,8 +23,8 @@ const prev1Page = () => {
 
 // 뒤로 1페이지 이동
 const next1Page = () => {
-  if (movieStore.currentPage < movieStore.totalPages){
-    movieStore.getMoviePopular(movieStore.currentPage + 1)
+  if (movieStore.po_currentPage < movieStore.po_totalPages){
+    movieStore.getMoviePopular(movieStore.po_currentPage + 1)
   } else {
     alert('마지막 페이지 입니다.')
   }
@@ -33,19 +33,19 @@ const next1Page = () => {
 
 // 특정 페이지로 이동
 const goToPage = (pageNum) => {
-  if (pageNum !== movieStore.currentPage) {
+  if (pageNum !== movieStore.po_currentPage) {
     movieStore.getMoviePopular(pageNum);
   }
 };
 
 // 앞으로 5페이지 이동
 const prevPage = () => {
-  if (movieStore.currentPage > 1){
-    if (movieStore.currentPage - 5 > 1){
-      movieStore.getMoviePopular(movieStore.currentPage - 5) // API 호출
+  if (movieStore.po_currentPage > 1){
+    if (movieStore.po_currentPage - 5 > 1){
+      movieStore.getMoviePopular(movieStore.po_currentPage - 5) // API 호출
     } else{
-      movieStore.currentPage = 1
-      movieStore.getMoviePopular(movieStore.currentPage)
+      movieStore.po_currentPage = 1
+      movieStore.getMoviePopular(movieStore.po_currentPage)
     }
   } else {
     alert('첫 번째 페이지 입니다.')
@@ -54,12 +54,12 @@ const prevPage = () => {
 
 // 뒤로 5페이지 이동
 const nextPage = () => {
-  if (movieStore.currentPage < movieStore.totalPages){
-    if (movieStore.currentPage + 5 < movieStore.totalPages){
-      movieStore.getMoviePopular(movieStore.currentPage + 5)
+  if (movieStore.po_currentPage < movieStore.po_totalPages){
+    if (movieStore.po_currentPage + 5 < movieStore.po_totalPages){
+      movieStore.getMoviePopular(movieStore.po_currentPage + 5)
     } else{
-      movieStore.currentPage = movieStore.totalPages
-      movieStore.getMoviePopular(movieStore.currentPage)
+      movieStore.po_currentPage = movieStore.po_totalPages
+      movieStore.getMoviePopular(movieStore.po_currentPage)
     }
   } else {
     alert('마지막 페이지 입니다.')
@@ -69,19 +69,19 @@ const nextPage = () => {
 // 페이지 번호 목록 생성
 const pageNumbers = computed(() => {
   const pages = [];
-  let startPage = movieStore.currentPage - 5
-  let endPage = movieStore.currentPage + 5
+  let startPage = movieStore.po_currentPage - 5
+  let endPage = movieStore.po_currentPage + 5
 
   // 첫 페이지가 1보다 작은 경우 조정
   if (startPage < 1){
     startPage = 1
-    endPage = Math.min(10, movieStore.totalPages)
+    endPage = Math.min(10, movieStore.po_totalPages)
   }
   
   // 마지막 페이지가 totalPages보다 큰 경우 조정
-  if (endPage > movieStore.totalPages){
-    endPage = movieStore.totalPages
-    endPage = Math.max(1, movieStore.totalPages - 9)
+  if (endPage > movieStore.po_totalPages){
+    endPage = movieStore.po_totalPages
+    endPage = Math.max(1, movieStore.po_totalPages - 9)
   }
   
   for (let i = startPage; i <= endPage; i++){
@@ -114,8 +114,8 @@ const getBackDrop = (backDropPath, imageSize) => {
 }
 
 const movies = computed(() => movieStore.movie_popular)
-const currentPage = computed(() => movieStore.currentPage)
-const totalPages = computed(() => movieStore.totalPages)
+const currentPage = computed(() => movieStore.po_currentPage)
+const totalPages = computed(() => movieStore.po_totalPages)
 // console.log(movies)
 
 </script>

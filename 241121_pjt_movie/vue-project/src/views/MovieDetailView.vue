@@ -66,6 +66,7 @@ const formateDate = (dateString) => {
         <p>status : {{ movieDetail.status }}</p>
         <p>vote_avg : {{ movieDetail.vote_avg }}</p>
         <p>vote_count : {{ movieDetail.vote_count }}</p>
+        <p>review : {{ movieDetail.reviews }}</p>
         <!-- <p>{{ movie.poster_url }}</p>
         <p>{{ movie.backdrop_url }}</p> -->
       </div>

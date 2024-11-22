@@ -1,10 +1,29 @@
 from rest_framework import serializers
-from .models import Movie
+from .models import Movie, Review
+
+# 리뷰 시리얼라이저
+class ReviewSerializer(serializers.ModelSerializer): 
+  class Meta:
+    model = Review
+    fields = '__all__'
+    read_only_fields = (
+      'user',
+      'movie'
+    )
 
 
 class MovieSerializer(serializers.ModelSerializer):
   poster_url = serializers.SerializerMethodField()
   backdrop_url = serializers.SerializerMethodField()
+  reviews = ReviewSerializer(many=True, read_only=True, source='reviews.all')
+
+  # 리뷰 보이기
+  # class ReviewSerializer(serializers.ModelSerializer):
+  #   class Meta:
+  #     model = Review
+  #     fields = '__all__'
+    
+  # review_set = ReviewSerializer(read_only=True, many=True)
 
   class Meta:
     model = Movie
@@ -21,6 +40,15 @@ class MovieSerializer(serializers.ModelSerializer):
 class MovieListSerializer(serializers.ModelSerializer):
   poster_url = serializers.SerializerMethodField()
   backdrop_url = serializers.SerializerMethodField()
+
+  # 리뷰 보이기
+  # class ReviewSerializer(serializers.ModelSerializer):
+  #   class Meta:
+  #     model = Review
+  #     fields = '__all__'
+
+  review_set = ReviewSerializer(read_only=True, many=True, source='reviews.all')
+  review_count = serializers.IntegerField(source='review_set.count', read_only=True)
 
   class Meta:
     model = Movie

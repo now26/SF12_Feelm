@@ -4,12 +4,17 @@ import { onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router';
 import { useMovieStore } from '@/stores/movies';
-import MoviePopularDetailView from '@/views/Movie_tmdb/MoviePopularDetailView.vue';
+import MovieNowPlayingDetailView from '@/views/Movie_tmdb/MovieNowPlayingDetailView.vue';
 
 const movieStore = useMovieStore()
 
+const updateDateRange = (newDateRange) => {
+  console.log('newDate: ', newDateRange)
+}
+
+
 onMounted(() => {
-  movieStore.getMoviePopular(movieStore.currentPage)
+  movieStore.getMovieNowPlaying(movieStore.np_currentPage)
 })
 
 const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
@@ -31,18 +36,21 @@ const getBackDrop = (backDropPath, imageSize) => {
 //   }
 }
 
-const movies = computed(() => movieStore.movie_popular)
-const currentPage = computed(() => movieStore.currentPage)
-const totalPages = computed(() => movieStore.totalPages)
-// console.log(movies)
+const movies = computed(() => movieStore.movie_nowPlaying)
+const currentPage = computed(() => movieStore.np_currentPage)
+const totalPages = computed(() => movieStore.np_totalPages)
+console.log(movies)
 
 </script>
 
 
 <template>
   <div>
-    <h3>Popular Movies</h3>
-    <RouterLink :to="{ name:'MoviePopularDetailView' }">Detail</RouterLink>
+    <h3>Movie Now Playing</h3>
+    <RouterLink :to="{ name:'MovieNowPlayingDetailView' }">Detail</RouterLink>
+
+    <!-- 날짜 범위 선택 컴포넌트 -->
+    <MovieNowPlayingDetailView @date-range-changed="updateDateRange" />
 
     <div>
       <div v-if="movies.length !== null">
@@ -52,7 +60,7 @@ const totalPages = computed(() => movieStore.totalPages)
             :key="movie.id"
             class="movie-card"
           >
-            <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
+            <img :src="getPosterUrl(movie.poster_path, 'original')" alt="Movie Poster" class="movie-poster">
             <p><b>{{ movie.title }}</b></p>
   
           </div>

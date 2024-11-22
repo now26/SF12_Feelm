@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+from accounts.models import User
 
 class Movie(models.Model):
     tmdb_id = models.IntegerField()
@@ -59,3 +60,25 @@ class Movie(models.Model):
         # original – 원본 크기 (최대 해상도)
 
         # w1280이나 original 크기는 가장 큰 해상도를 제공하며, original은 이미지의 원본 크기 그대로 제공함.
+
+
+
+# 리뷰 모델
+class Review(models.Model):
+    user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, related_name='reviews', on_delete=models.CASCADE)
+    content = models.TextField()
+    is_like = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    rating = models.FloatField(
+        choices=[
+            (0.0, '0'), (0.5, '0.5'), 
+            (1.0, '1'), (1.5, '1.5'),
+            (2.0, '2'), (2.5, '2.5'),
+            (3.0, '3'), (3.5, '3.5'),
+            (4.0, '4'), (4.5, '4.5'),
+            (5.0, '5')
+        ],
+        default=0.0
+    )
