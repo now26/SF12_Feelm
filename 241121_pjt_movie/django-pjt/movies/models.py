@@ -24,6 +24,9 @@ class Movie(models.Model):
     genre = models.TextField(null=True, blank=True)
     keyword = models.TextField(null=True, blank=True)
     spoken_lang = models.CharField(max_length=20, null=True, blank=True)
+    
+    like_movies = models.ManyToManyField('accounts.User', related_name='like_movies', null=True, blank=True)
+    bookmark = models.ManyToManyField('accounts.User', related_name='bookmark', null=True, blank=True)
 
 
     like_movies = models.ManyToManyField('accounts.User', related_name='like_movies', null=True, blank=True)

@@ -69,6 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     return token
 
 
+    
 class Diary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='diary')
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='diary')
