@@ -68,7 +68,7 @@ class Review(models.Model):
     user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, related_name='reviews', on_delete=models.CASCADE)
     content = models.TextField()
-    is_like = models.BooleanField()
+    like_reviews = models.ManyToManyField(User, related_name='like_reviews', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     rating = models.FloatField(
