@@ -62,24 +62,43 @@ def movie_detail(request, tmdb_id):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# 리뷰 get, post
-# @api_view(['GET', 'POST'])
-# def review(request, tmdb_id):
-#     movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
-#     if request.method == 'GET':
-#         pass
-#     elif request.method == 'POST':
-#         pass
+# 리뷰 put, delete
+@api_view(['PUT', 'DELETE'])
+def review(request, tmdb_id, review_id):
+    user = request.user
+    movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    review = get_object_or_404(Review, id=review_id)
+    if request.method == 'PUT':
+        if user == review.user:
+            serializer = ReviewSerializer(review, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response({'message':'본인이 작성한 리뷰가 아닙니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+    elif request.method == 'DELETE':
+        print(review.user)
+        if user == review.user:
+            review.delete()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        return Response({'message':'본인이 작성한 리뷰가 아닙니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# @api_view(['GET'])
-# def movie_detail(request, tmdb_id):
-#     user = request.user
-#     movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
-#     if request.method == 'GET':
-#         serializer = MovieSerializer(movie)
-#         print(serializer.data)
-#         return Response(serializer.data)
+# 리뷰 좋아요
+@api_view(['POST'])
+def like(request, tmdb_id, review_id):
+    user = request.user
+    movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    review = get_object_or_404(Review, id=review_id)
+    if request.method == 'POST':
+        # 유저가 좋아요 목록에 있다면 좋아요 취소
+        if user in review.like_reviews.all():
+            review.like_reviews.remove(user)
+            return Response({'message':'좋아요 취소 성공'}, status=status.HTTP_202_ACCEPTED)
+        # 유저가 좋아요 목록에 없다면 좋아요 추가
+        else:
+            review.like_reviews.add(user)
+            return Response({'message':'좋아요 성공'}, status=status.HTTP_202_ACCEPTED)
+        
 
 
 # # TMDB API에서 데이터 다운로드 후 출력
