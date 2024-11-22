@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_list_or_404, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -11,9 +11,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import User
-from .serializers import SignupSerializer, LoginSerializer, UserInfoSerializer
+from .models import User, Diary
+from .serializers import SignupSerializer, LoginSerializer, UserInfoSerializer, DiarySerializer, DiaryListSerializer
 from .renders import UserJSONRenderer
+
+from movies.models import Movie, Review
 
 # 회원가입
 class SignupAPIView(APIView):
@@ -74,3 +76,49 @@ class LogoutView(APIView):
         if request.user:
             logout(request)
             return Response({'message':'로그아웃 완료'}, status=status.HTTP_202_ACCEPTED)
+
+
+### 마이페이지
+@api_view(['GET'])
+@login_required
+def mypage(request):
+    user = request.user
+    if request.method == 'GET':
+        serializer = UserInfoSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+# 일기 목록, 작성
+@api_view(['GET', 'POST'])
+@login_required
+def diary(request):
+    user = request.user
+    if request.method == 'GET':
+        diaries = Diary.objects.filter(user=user)
+        serializer = DiaryListSerializer(diaries, many=True)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    elif request.method == 'POST':
+        tmdb_id = request.data['tmdb_id']
+        movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+        serializer = DiarySerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=user, movie=movie)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    
+# 일기 수정, 삭제
+@api_view(['PUT', 'DELETE'])
+@login_required
+def diary_update(request, diary_id):
+    user = request.user
+    diary = get_object_or_404(Diary, id=diary_id)
+    if request.method == 'PUT':
+        if user == diary.user:
+            serializer = DiarySerializer(diary, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    elif request.method == 'DELETE':
+        if user == diary.user:
+            diary.delete()
+            return Response({'message':'삭제 성공'}, status=status.HTTP_202_ACCEPTED)
+    
