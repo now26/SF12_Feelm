@@ -66,7 +66,6 @@ class LoginAPIView(APIView):
             return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
         
 
-
 # 로그아웃
 class LogoutView(APIView):
     # authentication_classes = [SessionAuthentication]

@@ -1,4 +1,10 @@
 <script setup>
+import { RouterLink, RouterView } from 'vue-router'
+
+import MyPageNavbar from '@/components/Common/MyPageNavbar.vue';
+
+import UserInfo from '@/components/User/UserInfo.vue';
+import UserInfoView from './UserInfoView.vue';
 import Review from '@/components/User/Review.vue';
 </script>
 
@@ -6,7 +12,10 @@ import Review from '@/components/User/Review.vue';
 <template>
   <div>
     <h1>My Page</h1>
-    <Review />
+    <UserInfo />
+    <MyPageNavbar />
+    <UserInfoView />
+    <!-- <Review /> -->
   </div>
 </template>
 
