@@ -14,7 +14,7 @@ class Movie(models.Model):
     vote_count = models.IntegerField(null=True, blank=True)
     # released == true    
     status = models.CharField(max_length=20, null=True, blank=True)
-    release_date = models.DateTimeField(null=True, blank=True)
+    release_date = models.DateField(null=True, blank=True)
     runtime = models.IntegerField(null=True, blank=True)
     adult = models.BooleanField(null=True, blank=True)
     movie_homepage = models.CharField(max_length=255, null=True, blank=True)
@@ -25,41 +25,10 @@ class Movie(models.Model):
     keyword = models.TextField(null=True, blank=True)
     spoken_lang = models.CharField(max_length=20, null=True, blank=True)
     
-    like_movies = models.ManyToManyField('accounts.User', related_name='like_movies', null=True, blank=True)
-    bookmark = models.ManyToManyField('accounts.User', related_name='bookmark', null=True, blank=True)
+    like_movies = models.ManyToManyField('accounts.User', related_name='like_movies')
+    bookmark = models.ManyToManyField('accounts.User', related_name='bookmark')
 
-
-    like_movies = models.ManyToManyField('accounts.User', related_name='like_movies', null=True, blank=True)
-    bookmark = models.ManyToManyField('accounts.User', related_name='bookmark', null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        # release_date가 naive datetime이면 timezone-aware datetime으로 변환
-        if self.release_date and timezone.is_naive(self.release_date):
-            self.release_date = timezone.make_aware(self.release_date, timezone.get_current_timezone())
-
-        # 부모 클래스의 save 메서드 호출
-        super(Movie, self).save(*args, **kwargs)
-
-
-    # 이미지 상대경로 -> 절대경로 변경
-    def get_full_poster_url(self, image_size="original"):
-        # """포스터 이미지 URL을 반환, 기본 크기는 original."""
-        base_url = "https://image.tmdb.org/t/p/" # 이미지 URL의 기본 경로
-        # image_size = "w500"
-        if self.poster_path: 
-            return f"{base_url}{image_size}{self.poster_path}" # poster_path에 기본 URL을 추가
-        else:
-            return None # poster_path가 없다면 None 반환
-    
-    def get_full_backdrop_url(self, image_size = "original"):
-        """배경 이미지 URL을 반환, 기본 크기는 original."""
-        base_url = "https://image.tmdb.org/t/p/"
-        # image_size = "original" 
-        if self.backdrop_image:
-            return f"{base_url}{image_size}{self.backdrop_image}"  # backdrop_image에 기본 URL을 추가
-        else:
-            return None # backdrop_image가 없다면 None 반환
-        
+     
     # image_size 참고
         # w300 – 300픽셀의 너비 (작은 사이즈)
         # w500 – 500픽셀의 너비
@@ -76,7 +45,7 @@ class Review(models.Model):
     user = models.ForeignKey('accounts.User', related_name='reviews', on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, related_name='reviews', on_delete=models.CASCADE)
     content = models.TextField()
-    like_reviews = models.ManyToManyField('accounts.User', related_name='like_reviews', null=True, blank=True)
+    like_reviews = models.ManyToManyField('accounts.User', related_name='like_reviews')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     rating = models.FloatField(
