@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db.models.fields import BooleanField
 
 from .managers import UserManager
+from movies.models import Movie
 
 # 방법2. 닉네임 랜덤값 생성코드 추가
 import random
@@ -66,3 +67,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     #         algorithm='HS256'
     #     )
     #     return token
+    
+class Diary(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='diary')
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='diary')
+    title = models.CharField(max_length=50)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

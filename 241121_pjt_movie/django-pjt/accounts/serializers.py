@@ -1,12 +1,42 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import User
+from .models import User, Diary
+from movies.models import Movie, Review
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = (
+            'id',
+            'tmdb_id',
+            'title',
+            'poster_path',
+        )
 # 사용자 정보
 class UserInfoSerializer(serializers.ModelSerializer):
+            
+    class ReviewSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Review
+            fields = (
+                'movie',
+                'content',
+                'rating',
+                'user',
+            )
+            
+    # 유저가 좋아요한 영화
+    like_movies = MovieSerializer(many=True, read_only=True, source='like_movies.all')
+    # 유저가 북마크한 영화
+    bookmark = MovieSerializer(many=True, read_only=True, source='bookmark.all')
+    # 유저가 좋아요한 리뷰
+    like_reviews = ReviewSerializer(many=True, read_only=True, source='like_reviews.all')
+    # 유저가 작성한 리뷰
+    reviews = ReviewSerializer(many=True, read_only=True, source='reviews.all')
+    
     class Meta:
         model = User
         fields = (
@@ -15,6 +45,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'profile_image',
             'gender',
             'age',
+            'like_movies',
+            'bookmark',
+            'like_reviews',
+            'reviews',
         )
 
 # 회원가입
@@ -87,3 +121,45 @@ class LoginSerializer(serializers.Serializer):
         return {
             'username': user.username, 'nickname': user.nickname, 'access_token': access_token, 'refresh_token': refresh_token
         }
+        
+# 회원 정보 변경
+# class UserSerializer(serializers.ModelSerializer):
+#     # 원래 비밀번호 확인할 필드
+#     password1 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+#     # 새롭게 정의할 비밀번호와 비밀번호 확인
+#     password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+#     password3 = serializers.CharField(max_length=128, min_length=8, write_only=True)
+#     class Meta:
+#         model = User
+#         fields = (
+#             'nickname',
+#             'profile_image',
+#             'password',
+#             'age',
+#             'gener',
+#             'token',
+#         )
+#         read_only_fields = ('token',)
+    
+#     def update(self, instance, validated_data):
+#         password1 = validated_data.pop('password1', None)
+#         if password1 != 유저의 원래 비밀번호:
+#             return serializers.ValidationError('비밀번호가 틀렸습니다.')
+#         password2 = validated_data.pop('password2', None)
+#         password3 = validated_data.pop('password3', None)
+#         if password2 != password3:
+#             return serializers.ValidationError('비밀번호가 다릅니다.')
+        
+# 일기 
+class DiaryListSerializer(serializers.ModelSerializer):
+    # movie = MovieSerializer(read_only=True, source='movie.all')
+    class Meta:
+        model = Diary
+        fields = '__all__'
+        read_only_fields = ('user',)
+
+class DiarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Diary
+        fields = '__all__'
+        read_only_fields = ('user', 'movie',)
