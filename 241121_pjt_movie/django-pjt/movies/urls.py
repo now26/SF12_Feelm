@@ -19,6 +19,12 @@ urlpatterns = [
   # movie_detail화면
   path('<int:tmdb_id>/', views.movie_detail, name='movie_detail'),
   
+  # movie 좋아요
+  path('<int:tmdb_id>/like/', views.like_movie, name='like_movie'),
+  
+  # movie 나중에 다시 볼 어쩌구
+  path('<int:tmdb_id>/bookmark/', views.bookmark, name='bookmark'),
+  
   # 리뷰 수정, 삭제
   path('<int:tmdb_id>/<int:review_id>/', views.review, name='review'),
   

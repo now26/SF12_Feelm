@@ -4,13 +4,13 @@ import { onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router';
 import { useMovieStore } from '@/stores/movies';
-import MovieTopRatedDetailView from '@/views/Movie_tmdb/MovieTopRatedDetailView.vue';
+import MovieUpComingDetailView from '@/views/Movie_tmdb/MovieUpComingDetailView.vue';
 
 const movieStore = useMovieStore()
 
 onMounted(() => {
   // window.addEventListener(eventName, updateDateRange)
-  movieStore.getMovieTopRated(movieStore.tr_currentPage)
+  movieStore.getMovieUpComing(movieStore.up_currentPage)
 })
 
 const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
@@ -32,9 +32,9 @@ const getBackDrop = (backDropPath, imageSize) => {
 //   }
 }
 
-const movies = computed(() => movieStore.movie_topRated)
-const currentPage = computed(() => movieStore.tr_currentPage)
-const totalPages = computed(() => movieStore.tr_totalPages)
+const movies = computed(() => movieStore.movie_upComing)
+const currentPage = computed(() => movieStore.up_currentPage)
+const totalPages = computed(() => movieStore.up_totalPages)
 // console.log(movies)
 
 </script>
@@ -42,8 +42,11 @@ const totalPages = computed(() => movieStore.tr_totalPages)
 
 <template>
   <div>
-    <h3>Top Rated Movies</h3>
-    <RouterLink :to="{ name:'MovieTopRatedDetailView' }">Detail</RouterLink>
+    <h3>Upcoming Movies</h3>
+    <RouterLink :to="{ name:'MovieUpComingDetailView' }">Detail</RouterLink>
+
+    <!-- 날짜 범위 선택 컴포넌트 -->
+    <!-- <MovieNowPlayingDetailView @date-range-changed="updateDateRange" /> -->
 
     <div>
       <div v-if="movies.length !== null">

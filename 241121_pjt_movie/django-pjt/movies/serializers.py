@@ -52,7 +52,10 @@ class MovieListSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Movie
-    fields = ('tmdb_id', 'title', 'vote_avg', 'vote_count', 'status', 'release_date', 'runtime', 'poster_url', 'backdrop_url')
+    fields = (
+      'tmdb_id', 'title', 'vote_avg', 'vote_count', 'status', 'release_date', 'runtime', 'poster_url', 'backdrop_url',
+      'review_set', 'review_count',
+    )
     
 
   def get_poster_url(self, obj):

@@ -70,7 +70,7 @@ def review(request, tmdb_id, review_id):
     review = get_object_or_404(Review, id=review_id)
     if request.method == 'PUT':
         if user == review.user:
-            serializer = ReviewSerializer(review, data=request.data)
+            serializer = ReviewSerializer(review, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
@@ -81,6 +81,36 @@ def review(request, tmdb_id, review_id):
             review.delete()
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response({'message':'본인이 작성한 리뷰가 아닙니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+# 영화 좋아요
+@api_view(['POST'])
+def like_movie(request, tmdb_id):
+    user = request.user
+    movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    if request.method == 'POST':
+        # 유저가 좋아요 목록에 있다면 좋아요 취소
+        if user in movie.like_movies.all():
+            movie.like_movies.remove(user)
+            return Response({'message':'좋아요 취소 성공'}, status=status.HTTP_202_ACCEPTED)
+        # 유저가 좋아요 목록에 없다면 좋아요 추가
+        else:
+            movie.like_movies.add(user)
+            return Response({'message':'좋아요 성공'}, status=status.HTTP_202_ACCEPTED)
+
+# 영화 북마크
+@api_view(['POST'])
+def bookmark(request, tmdb_id):
+    user = request.user
+    movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    if request.method == 'POST':
+        # 유저가 북마크 목록에 있다면 북마크 취소
+        if user in movie.bookmark.all():
+            movie.bookmark.remove(user)
+            return Response({'message':'북마크 취소 성공'}, status=status.HTTP_202_ACCEPTED)
+        # 유저가 북마크 목록에 없다면 북마크 추가
+        else:
+            movie.bookmark.add(user)
+            return Response({'message':'북마크 성공'}, status=status.HTTP_202_ACCEPTED)
 
 
 # 리뷰 좋아요

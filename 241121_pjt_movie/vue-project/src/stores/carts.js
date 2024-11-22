@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 import { useCounterStore } from './counter'
 
 
-  export const useCartStore = defineStore('cart', () => {
+export const useCartStore = defineStore('cart', () => {
 
     let products = ref([])
     let carts = ref([])

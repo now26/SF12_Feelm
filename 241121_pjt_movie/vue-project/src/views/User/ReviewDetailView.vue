@@ -1,12 +1,11 @@
 <script setup>
-import Review from '@/components/User/Review.vue';
+
 </script>
 
 
 <template>
   <div>
-    <h1>My Page</h1>
-    <Review />
+    <h1>Review</h1>
   </div>
 </template>
 

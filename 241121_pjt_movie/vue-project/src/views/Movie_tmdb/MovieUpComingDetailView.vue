@@ -12,26 +12,13 @@ const startDate = ref('')
 const endDate = ref('')
 
 const sendDateRange = () => {
-  // const eventName = `MovieNowPlayingDetailView-date-range-changed`
-  // const event = new CustomEvent(eventName, {
-  //   detail: { startDate: startDate.value, endDate: endDate.value }
-  // })
-  // console.log(event)
-  // window.dispatchEvent(event)
-
-  // movieStore.updateDateRange({
-  //   startDate: startDate.value,
-  //   endDate: endDate.value
-  // })
-  // movieStore.getMovieNowPlaying(1)
-
-  movieStore.getMovieNowPlaying(1, startDate.value, endDate.value)
+  movieStore.getMovieUpComing(1, startDate.value, endDate.value)
 }
 
 const resetRange = () => {
   startDate.value = null
   endDate.value = null
-  movieStore.getMovieNowPlaying(1)
+  movieStore.getMovieUpComing(1)
 }
 
 // 날짜를 'YYYY-MM-DD' 형식으로 변환
@@ -47,14 +34,16 @@ const formatDate = (date) => {
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
 onMounted(() => {
   const today = new Date()
-  const lastMonth = new Date(today)
-  lastMonth.setMonth(today.getMonth() - 1)
+  const nearFuture = new Date(today)
+  const future = new Date(today)
+  nearFuture.setDate(today.getDate() + 7) // 7일 후
+  future.setMonth(today.getMonth() + 1)
 
   // 날짜를 'YYYY-MM-DD' 형식으로 변환
-  startDate.value = formatDate(lastMonth)
-  endDate.value = formatDate(today)
+  startDate.value = formatDate(nearFuture)
+  endDate.value = formatDate(future)
 
-  movieStore.getMovieNowPlaying(movieStore.np_currentPage)
+  movieStore.getMovieUpComing(movieStore.up_currentPage)
 })
 
 
@@ -63,8 +52,8 @@ onMounted(() => {
 
 // 앞으로 1페이지 이동
 const prev1Page = () => {
-  if (movieStore.np_currentPage > 1){
-    movieStore.getMovieNowPlaying(movieStore.np_currentPage - 1) // API 호출
+  if (movieStore.up_currentPage > 1){
+    movieStore.getMovieUpComing(movieStore.up_currentPage - 1) // API 호출
   } else {
     alert('첫 번째 페이지 입니다.')
   }
@@ -72,8 +61,8 @@ const prev1Page = () => {
 
 // 뒤로 1페이지 이동
 const next1Page = () => {
-  if (movieStore.np_currentPage < movieStore.np_totalPages){
-    movieStore.getMovieNowPlaying(movieStore.np_currentPage + 1)
+  if (movieStore.up_currentPage < movieStore.up_totalPages){
+    movieStore.getMovieUpComing(movieStore.up_currentPage + 1)
   } else {
     alert('마지막 페이지 입니다.')
   }
@@ -82,19 +71,19 @@ const next1Page = () => {
 
 // 특정 페이지로 이동
 const goToPage = (pageNum) => {
-  if (pageNum !== movieStore.np_currentPage) {
-    movieStore.getMovieNowPlaying(pageNum);
+  if (pageNum !== movieStore.up_currentPage) {
+    movieStore.getMovieUpComing(pageNum);
   }
 };
 
 // 앞으로 5페이지 이동
 const prevPage = () => {
-  if (movieStore.np_currentPage > 1){
-    if (movieStore.np_currentPage - 5 > 1){
-      movieStore.getMovieNowPlaying(movieStore.np_currentPage - 5) // API 호출
+  if (movieStore.up_currentPage > 1){
+    if (movieStore.up_currentPage - 5 > 1){
+      movieStore.getMovieUpComing(movieStore.up_currentPage - 5) // API 호출
     } else{
-      movieStore.np_currentPage = 1
-      movieStore.getMovieNowPlaying(movieStore.np_currentPage)
+      movieStore.up_currentPage = 1
+      movieStore.getMovieUpComing(movieStore.up_currentPage)
     }
   } else {
     alert('첫 번째 페이지 입니다.')
@@ -103,12 +92,12 @@ const prevPage = () => {
 
 // 뒤로 5페이지 이동
 const nextPage = () => {
-  if (movieStore.np_currentPage < movieStore.np_totalPages){
-    if (movieStore.np_currentPage + 5 < movieStore.np_totalPages){
-      movieStore.getMovieNowPlaying(movieStore.np_currentPage + 5)
+  if (movieStore.up_currentPage < movieStore.up_totalPages){
+    if (movieStore.up_currentPage + 5 < movieStore.up_totalPages){
+      movieStore.getMovieUpComing(movieStore.up_currentPage + 5)
     } else{
-      movieStore.np_currentPage = movieStore.np_totalPages
-      movieStore.getMovieNowPlaying(movieStore.np_currentPage)
+      movieStore.up_currentPage = movieStore.up_totalPages
+      movieStore.getMovieUpComing(movieStore.up_currentPage)
     }
   } else {
     alert('마지막 페이지 입니다.')
@@ -118,19 +107,19 @@ const nextPage = () => {
 // 페이지 번호 목록 생성
 const pageNumbers = computed(() => {
   const pages = [];
-  let startPage = movieStore.np_currentPage - 5
-  let endPage = movieStore.np_currentPage + 5
+  let startPage = movieStore.up_currentPage - 5
+  let endPage = movieStore.up_currentPage + 5
 
   // 첫 페이지가 1보다 작은 경우 조정
   if (startPage < 1){
     startPage = 1
-    endPage = Math.min(10, movieStore.np_totalPages)
+    endPage = Math.min(10, movieStore.up_totalPages)
   }
   
   // 마지막 페이지가 totalPages보다 큰 경우 조정
-  if (endPage > movieStore.np_totalPages){
-    endPage = movieStore.np_totalPages
-    endPage = Math.max(1, movieStore.np_totalPages - 9)
+  if (endPage > movieStore.up_totalPages){
+    endPage = movieStore.up_totalPages
+    endPage = Math.max(1, movieStore.up_totalPages - 9)
   }
   
   for (let i = startPage; i <= endPage; i++){
@@ -160,9 +149,9 @@ const getBackDrop = (backDropPath, imageSize) => {
 //   }
 }
 
-const movies = computed(() => movieStore.movie_nowPlaying)
-const currentPage = computed(() => movieStore.np_currentPage)
-const totalPages = computed(() => movieStore.np_totalPages)
+const movies = computed(() => movieStore.movie_upComing)
+const currentPage = computed(() => movieStore.up_currentPage)
+const totalPages = computed(() => movieStore.up_totalPages)
 // console.log(movies)
 
 
@@ -172,7 +161,7 @@ const totalPages = computed(() => movieStore.np_totalPages)
 
 <template>
   <div>
-    <h3>Now Playing Movies</h3>
+    <h3>Upcoming Movies</h3>
 
     <div>
       <span>검색기간 </span>

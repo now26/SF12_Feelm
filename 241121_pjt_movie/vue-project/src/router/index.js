@@ -17,6 +17,9 @@ import cartRouter from '@/router/cart'
 // movie.js 라우터를 불러오기.
 import movieRouter from '@/router/movie'
 
+// user.js 라우터를 불러오기.
+import userRouter from '@/router/user'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,11 +38,6 @@ const router = createRouter({
       path: '/login',
       name: 'LogInView',
       component: LogInView
-    },
-    {
-      path: '/mypage',
-      name: 'MyPageView',
-      component: MyPageView
     },
     {
       path: '/articles',
@@ -62,6 +60,9 @@ const router = createRouter({
     
     // movie.js 라우터를 추가
     ...movieRouter.options.routes,
+
+    // user.js 라우터를 추가
+    ...userRouter.options.routes,
   ],
 })
 

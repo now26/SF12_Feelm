@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
-from accounts.models import User
+# from accounts.models import User
 
 class Movie(models.Model):
     tmdb_id = models.IntegerField()
@@ -23,6 +24,10 @@ class Movie(models.Model):
     genre = models.TextField(null=True, blank=True)
     keyword = models.TextField(null=True, blank=True)
     spoken_lang = models.CharField(max_length=20, null=True, blank=True)
+
+
+    like_movies = models.ManyToManyField('accounts.User', related_name='like_movies', null=True, blank=True)
+    bookmark = models.ManyToManyField('accounts.User', related_name='bookmark', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # release_date가 naive datetime이면 timezone-aware datetime으로 변환
@@ -65,10 +70,10 @@ class Movie(models.Model):
 
 # 리뷰 모델
 class Review(models.Model):
-    user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.User', related_name='reviews', on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, related_name='reviews', on_delete=models.CASCADE)
     content = models.TextField()
-    like_reviews = models.ManyToManyField(User, related_name='like_reviews', null=True, blank=True)
+    like_reviews = models.ManyToManyField('accounts.User', related_name='like_reviews', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     rating = models.FloatField(

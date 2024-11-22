@@ -8,12 +8,18 @@ import MovieNowPlayingDetailView from '@/views/Movie_tmdb/MovieNowPlayingDetailV
 
 const movieStore = useMovieStore()
 
-const updateDateRange = (newDateRange) => {
-  console.log('newDate: ', newDateRange)
-}
+// const eventName = 'MovieNowPlayingDetailView-date-range-changed'
+// const dateRange = ref({ startDate: '', endDate: ''})
+
+// const updateDateRange = (newDateRange) => {
+//   dateRange.value = newDateRange.detail
+//   console.log(dateRange)
+//   console.log('newDate: ', newDateRange)
+// }
 
 
 onMounted(() => {
+  // window.addEventListener(eventName, updateDateRange)
   movieStore.getMovieNowPlaying(movieStore.np_currentPage)
 })
 
@@ -39,18 +45,18 @@ const getBackDrop = (backDropPath, imageSize) => {
 const movies = computed(() => movieStore.movie_nowPlaying)
 const currentPage = computed(() => movieStore.np_currentPage)
 const totalPages = computed(() => movieStore.np_totalPages)
-console.log(movies)
+// console.log(movies)
 
 </script>
 
 
 <template>
   <div>
-    <h3>Movie Now Playing</h3>
+    <h3>Now Playing Movies</h3>
     <RouterLink :to="{ name:'MovieNowPlayingDetailView' }">Detail</RouterLink>
 
     <!-- 날짜 범위 선택 컴포넌트 -->
-    <MovieNowPlayingDetailView @date-range-changed="updateDateRange" />
+    <!-- <MovieNowPlayingDetailView @date-range-changed="updateDateRange" /> -->
 
     <div>
       <div v-if="movies.length !== null">
