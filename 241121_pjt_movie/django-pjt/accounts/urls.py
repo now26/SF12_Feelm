@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SignupAPIView, LoginAPIView, LogoutView
+from .views import SignupAPIView, LoginAPIView, LogoutView, UserRetrieveUpdateAPIView
 from . import views
 
 # JWT 토큰(+ 241120)
@@ -11,6 +11,10 @@ urlpatterns = [
     path('signup/', SignupAPIView.as_view(), name='signup'),
     path('login/', LoginAPIView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    # 회원정보 변경
+    path('update/', UserRetrieveUpdateAPIView.as_view(), name='update'),
+    # 회원탈퇴
+    # path('delete/', views.delete, name='delete'),
 
     # urls.py에 JWT 토큰을 발급받고 검증하는 API 엔드포인트를 추가
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
