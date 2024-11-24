@@ -49,7 +49,7 @@ const logIn = async () => {
 
       <div class="extra-links">
         <a href="/forgot-password">비밀번호를 잊으셨나요?</a>
-        <a href="/sign-up">회원가입</a>
+        <router-link :to="{name:'SignUpView'}">회원가입</router-link>
       </div>
 
     </div>

@@ -64,15 +64,26 @@ const currentTabComponent = computed(() => {
     display: flex;
     gap: 10px;
     cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    justify-content: center;
 }
 
 .tab {
-    padding: 5px;
+    padding: 5px 10px;
+    margin-right: 20px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+}
+
+.tab:hover {
+    background-color: #333;
 }
 
 .tab.active {
   background-color: #FFF7D6;
   color: #1C2644;
+  
 }
 
 </style>

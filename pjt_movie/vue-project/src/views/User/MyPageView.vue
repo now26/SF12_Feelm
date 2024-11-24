@@ -24,7 +24,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>My Page</h1>
+    <!-- <h1>My Page</h1> -->
     <MyPageTabs />
     <!-- <TabsView /> -->
     <!-- <UserInfo />

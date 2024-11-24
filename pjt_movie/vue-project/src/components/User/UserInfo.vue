@@ -30,32 +30,36 @@ const profileImageUrl = computed(() => {
 
 
 <template>
-  <div>
-    <div>
-      <!-- nickname이 없으면 username을 사용 -->
-      <h3>{{ userDB.nickname || userDB.username }}님 안녕하세요!</h3>
-    </div>
+  <div class="info-container">
+    <div class="content">
+      <header>
+        <!-- nickname이 없으면 username을 사용 -->
+        <h3> <b class="name">{{ userDB.nickname || userDB.username }}</b> 님 안녕하세요!</h3>
+      </header>
 
-
-    <div class="grid-container">
-      <div>
-        <!-- 이미지가 없으면 defaultImage로 대체 -->
-        <img :src="profileImageUrl" alt="profile_image" class="profile_image">
-
-        <!-- <img :src="userDB.profile_image || defaultImage_chick" alt="profile_image" class="profile_image"> -->
-      </div>
+      <div class="grid-container">
+        <div>
+          <!-- 이미지가 없으면 defaultImage로 대체 -->
+          <img :src="profileImageUrl" alt="profile_image" class="profile_image">
   
-      <div>
-        <p>username : {{ userDB.username }}</p>
-        <p>nickname : {{ userDB.nickname }}</p>
-        <p>age : {{ userDB.age }}</p>
-        <p>gender : {{ userDB.gender }}</p>
-      
-      </div>
-    </div>
+          <!-- <img :src="userDB.profile_image || defaultImage_chick" alt="profile_image" class="profile_image"> -->
+        </div>
     
-    <!-- <UserInfo /> -->
+        <div>
+          <p class="info">username : {{ userDB.username }}</p>
+          <p class="info">nickname : {{ userDB.nickname }}</p>
+          <p class="info">age : {{ userDB.age }}</p>
+          <p class="info">gender : {{ userDB.gender }}</p>
+        
+          <router-link >회원정보 변경</router-link>
+        </div>
+      </div>
+
+
+    </div>
   </div>
+  
+  <!-- <UserInfo /> -->
 </template>
 
 
@@ -69,7 +73,33 @@ const profileImageUrl = computed(() => {
 .grid-container {
   display: grid;
   grid-template-columns: 50% 50%;
+  justify-content: center;
+  align-items: center;
   /* gap: 10px; 각 아이템 사이에 10px 간격 추가 */
+}
+
+.info-container {
+  /* background-color: aqua; */
+  min-height: 100dvh;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* 헤더 스타일 */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.2rem;
+}
+
+.name {
+  font-weight: bolder;
+}
+
+.info {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
 }
 
 </style>
