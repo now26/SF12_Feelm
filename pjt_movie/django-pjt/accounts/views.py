@@ -32,6 +32,21 @@ class SignupAPIView(APIView):
             # 잘 뜨는지 로그인 창으로 리다이렉트 시키기
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
+# username 확인 코드 (vue와 연결)
+@permission_classes([AllowAny])
+@api_view(['GET', 'POST'])
+def check_username(request):
+    username = request.data.get('username')
+    
+    if not username:
+        return Response({'error': 'Username is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if User.objects.filter(username=username).exists():
+        return Response({'exists': True}, status=status.HTTP_200_OK)
+    else:
+        return Response({'exists': False}, status=status.HTTP_200_OK)
+
+        
 # 로그인
 class LoginAPIView(APIView):
     permission_classes = (AllowAny,)

@@ -2,7 +2,7 @@
 import { useUserStore } from '@/stores/users';
 const userStore = useUserStore()
 
-import ReviewListItem from './ReviewListItem.vue';
+import ReviewListItem from '@/components/User/ReviewListItem.vue';
 
 defineProps({
   reviews:Object

@@ -8,7 +8,13 @@ defineProps({
 
 <template>
   <div>
-    {{ review }}
+    <ul>
+      <li>
+        <p>Movie : {{ review.movie }}</p>
+        <p>Contents : {{ review.content }}</p>
+        <p>Ratings : {{ review.rating }}</p>
+      </li>
+    </ul>
     <hr>
   </div>
 </template>

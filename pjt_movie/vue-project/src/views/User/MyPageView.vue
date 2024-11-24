@@ -1,20 +1,35 @@
 <script setup>
+import { useUserStore } from '@/stores/users';
+import { onMounted } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router'
 
 import MyPageNavbar from '@/components/Common/MyPageNavbar.vue';
 
-import UserInfo from '@/components/User/UserInfo.vue';
-import UserInfoView from './UserInfoView.vue';
-import Review from '@/components/User/Review.vue';
+import MyPageTabs from '@/components/User/MyPageTabs.vue';
+
+onBeforeRouteLeave((to, from, next) => {
+  // console.log('MyComponent 컴포넌트에서 떠날 때');
+  localStorage.removeItem('currentTab')
+  next();
+})
+
+const userStore = useUserStore()
+onMounted(() => {
+  userStore.getUserInfo()
+})
+
 </script>
 
 
 <template>
   <div>
     <h1>My Page</h1>
-    <UserInfo />
+    <MyPageTabs />
+    <!-- <TabsView /> -->
+    <!-- <UserInfo />
     <MyPageNavbar />
-    <UserInfoView />
+    <UserInfoView /> -->
     <!-- <Review /> -->
   </div>
 </template>

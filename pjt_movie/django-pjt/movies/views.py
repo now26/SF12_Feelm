@@ -16,7 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Permission Decorators
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny,IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from .serializers import MovieSerializer, MovieListSerializer, ReviewSerializer
 from .models import Movie, Review
@@ -38,6 +38,7 @@ def main(request):
         pass
 
 @api_view(['GET'])
+# @permission_classes([AllowAny])
 # @permission_classes([IsAuthenticated])
 # @permission_classes([JWTAuthentication])
 def movie_list(request):

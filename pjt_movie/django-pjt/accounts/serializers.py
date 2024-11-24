@@ -5,6 +5,11 @@ from movies.models import Movie, Review
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+# 랜덤 닉네임 생성 함수
+from .models import generate_random_nickname
+
+# 다국어 지원을 위함. gettext - 국제화(i18n) 가능한 메시지 만들기
+from django.utils.translation import gettext as _
 
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,6 +61,9 @@ class SignupSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(max_length=128, min_length=8, write_only=True)
     password2 = serializers.CharField(max_length=128, min_length=8, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+
+    profile_image = serializers.ImageField(required=False, allow_null=True)
+    nickname = serializers.CharField(max_length=20, required=False, allow_blank=True)
     
     class Meta:
         model = User
@@ -70,19 +78,43 @@ class SignupSerializer(serializers.ModelSerializer):
             'password2',
         )
         read_only_fields = ('token',)
-        
+
+    
+    # 비밀번호 확인 (vue와 연결 코드)
     def validate(self, attrs):
         if attrs['password1'] != attrs['password2']:
-            raise serializers.ValidationError("Passwords must match.")
+
+            raise serializers.ValidationError("Passwords가 다릅니다.")
+            # gettext 사용 : 언더바 _
+            # raise serializers.ValidationError(_("Passwords must match."))
+
+        # 전체 데이터 유효성 검사 => attrs 사용
         return attrs
+    
+    # # username 중복확인 (vue와 연결 코드)
+    # def validate_username(self, value):
+    #     if User.object.fliter(username=value).exists():
+    #         raise serializers.ValidationError("Username이 이미 존재합니다.")
+    #         # gettext 사용 : 언더바 _
+    #         # raise serializers.ValidationError(_("Username already exists!"))
+
+    #     # username 단일 값만 유효성 검사 => value 사용
+    #     return value
+    
     
     def create(self, validated_data):
         # password2는 validated_data에서 제거
         validated_data.pop('password2')
 
+        # nickname이 제공되지 않으면 랜덤 닉네임 생성
+        if 'nickname' not in validated_data or not validated_data['nickname']:
+            validated_data['nickname'] = generate_random_nickname()  # 랜덤 닉네임 생성
+
+
         # password1과 password2를 validated_data에서 제거하고 실제 User 모델에 저장
         password = validated_data.pop('password1')
         user = User.objects.create_user(password=password, **validated_data)
+
         return user
     
 # 로그인

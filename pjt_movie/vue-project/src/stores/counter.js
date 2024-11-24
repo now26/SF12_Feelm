@@ -20,10 +20,11 @@ export const useCounterStore = defineStore('counter', () => {
   // JWT 토큰이 있으면 로그인 상태
   const isLogin = computed(() => !!token.value) 
 
-  const signUp = async (formData) => {
+  const signUp = async (requestData) => {
     try {
-      const response = await axios.post(`${API_URL}/accounts/signup/`, formData, {
+      const response = await axios.post(`${API_URL}/accounts/signup/`, requestData, {
         headers: {
+          // 'Content-Type': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
       });

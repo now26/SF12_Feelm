@@ -9,6 +9,8 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('signup/', SignupAPIView.as_view(), name='signup'),
+    # username 중복확인
+    path('check-username/', views.check_username, name='check-username'),
     path('login/', LoginAPIView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     # 회원정보 변경

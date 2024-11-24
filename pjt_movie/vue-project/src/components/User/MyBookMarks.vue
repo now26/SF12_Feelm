@@ -1,9 +1,7 @@
 <script setup>
 import { useUserStore } from '@/stores/users';
-import { onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
-
-import ReviewList from '@/components/User/ReviewList.vue';
+import { onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router';
 
 const userStore = useUserStore()
 const userDB = userStore.userInfo
@@ -13,7 +11,13 @@ const userDB = userStore.userInfo
 
 <template>
   <div>
-    <ReviewList :reviews="userDB.reviews"/>
+    <div>
+  
+      <div>
+        <p>bookmark : {{ userDB.bookmark }}</p>
+      
+      </div>
+    </div>
   </div>
 </template>
 

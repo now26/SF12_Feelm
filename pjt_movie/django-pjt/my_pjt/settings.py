@@ -71,7 +71,8 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # 기본적으로 인증된 사용자만 접근하도록 설정
+        'rest_framework.permissions.AllowAny',  # 기본적으로 인증된 사용자만 접근하도록 설정
+        # 'rest_framework.permissions.IsAuthenticated',  # 기본적으로 인증된 사용자만 접근하도록 설정
     ],
 
 
@@ -181,7 +182,8 @@ AUTH_USER_MODEL = 'accounts.User'
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # 액세스 토큰의 유효기간 (15분 후 만료)
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # 액세스 토큰의 유효기간 (15분 후 만료)
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # 액세스 토큰의 유효기간 (1시간 후 만료)
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # 리프레시 토큰의 유효기간 (1일 후 만료)
     'ROTATE_REFRESH_TOKENS': False,                  # 리프레시 토큰 회전 여부 (False로 설정 시 기존 리프레시 토큰을 그대로 사용)
     'BLACKLIST_AFTER_ROTATION': False,               # 리프레시 토큰 회전 후 블랙리스트 여부 (토큰 회수 여부)
