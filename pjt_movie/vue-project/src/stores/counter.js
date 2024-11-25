@@ -32,7 +32,7 @@ export const useCounterStore = defineStore('counter', () => {
       console.log('회원가입 성공:', response.data);
       localStorage.setItem('access_token', response.data.token);
       token.value = response.data.token;  // 토큰 저장
-      router.push({ name: 'HomeView' });  // 홈 화면으로 이동
+      router.push({ name: 'LogInView' });  // 로그인 화면으로 이동
     } catch (error) {
       console.error('회원가입 실패:', error.response ? error.response.data : error.message);
       throw new Error('회원가입 실패');

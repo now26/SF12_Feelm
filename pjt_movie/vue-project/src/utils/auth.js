@@ -50,7 +50,13 @@ export const loginUser = async (username, password) => {
     const response = await api.post('accounts/login/', {
       username: username,
       password: password,
-    });
+    }, 
+    // {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   }
+    // }
+  );
 
     // 토큰을 로컬 스토리지에 저장
     localStorage.setItem('access_token', response.data.access_token);

@@ -172,17 +172,22 @@ const totalPages = computed(() => movieStore.np_totalPages)
 
 <template>
   <div>
-    <h3>Now Playing Movies</h3>
+    <header>
+      <h1>Now Playing Movies</h1>
+    </header>
 
-    <div>
-      <span>검색기간 </span>
-      <input type="date" id="startDate" v-model="startDate">&nbsp;
-      <label for="startDate">~</label>&nbsp;
+    <div id="page">
 
-      <input type="date" id="endDate" v-model="endDate">&nbsp;
+    </div>
+    <div class="selectForm">
+      <span class="selectTxt">검색기간 </span>
+      <input type="date" id="startDate" v-model="startDate" class="inputItem">&nbsp;
+      <label for="startDate" class="selectTxt">~</label>&nbsp;
+
+      <input type="date" id="endDate" v-model="endDate" class="inputItem">&nbsp;
       <label for="endDate"></label>
-      <button @click.prevent="sendDateRange">검색</button>&nbsp;
-      <button @click.prevent="resetRange">초기화</button>
+      <button @click.prevent="sendDateRange" class="btn">검색</button>&nbsp;
+      <button @click.prevent="resetRange" class="btn">초기화</button>
     </div>
 
 
@@ -195,7 +200,7 @@ const totalPages = computed(() => movieStore.np_totalPages)
             class="movie-card"
           >
             <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
-            <p><b>{{ movie.title }}</b></p>
+            <p class="movieInfo"><b>{{ movie.title }}</b></p>
   
           </div>
         </div>
@@ -213,7 +218,7 @@ const totalPages = computed(() => movieStore.np_totalPages)
       </div> -->
 
       <!-- 페이지 내비게이션 -->
-      <div>
+      <div class="pageCnt">
         <button @click="prevPage" :disabled="currentPage === 1"><<</button>&nbsp;
         <button @click="prev1Page" :disabled="currentPage === 1"><</button>&nbsp;
         
@@ -240,30 +245,93 @@ const totalPages = computed(() => movieStore.np_totalPages)
 
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+  padding-bottom: 20px;
+}
+
+.selectForm {
+  padding-top: 50px;
+  padding-right: 120px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.selectTxt {
+  font-size: 1.2rem;
+}
+
+.inputItem{
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 5px; 
+}
+
+.btn {
+  width: auto;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
 .movie-list {
   /* display: flex; -> 요소 가로로 위치 */
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding-left: 1rem;
+  justify-content: center;
 }
 
 .movie-card {
   /* border: 1px solid #fff; */
   border: 1px none;
-  width: 200px;
   padding: 5px;
 
 }
 
 .movie-poster {
-  width: 100%;
-  height: auto;
+  flex-shrink: 1;
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+
 }
 
+.movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
+.pageCnt {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  padding-top: 20px;
+  gap: 2px;
+}
 
 button:disabled {
   background-color: #ccc;
-  
   cursor: not-allowed;
 }
 

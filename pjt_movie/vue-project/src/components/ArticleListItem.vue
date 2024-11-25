@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div>
     <!-- <h5>ArticleListItem</h5> -->
-    <div>{{ test.id }}. {{ test.title }}</div>
+    <div class="textItem">{{ test.id }}. {{ test.title }}</div>
     <RouterLink :to="{ name:'ArticleDetailView', params:{ id : test.id }}">상세보기</RouterLink>
     <hr>
   </div>
@@ -18,5 +18,7 @@ defineProps({
 
 
 <style scoped>
-
+/* .textItem {
+  ;
+} */
 </style>

@@ -15,17 +15,29 @@ const movieStore = useMovieStore()
 
 
 <template>
-  <div>
+  <header>
     <h1>TMDB</h1>
+  </header>
+
+  <div id="page">
     <MoviePopular />
     <MovieUpComing />
     <MovieTopRated />
-    <!-- <MovieNowPlaying /> -->
+    <MovieNowPlaying />
 
   </div>
 </template>
 
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 50px;
+}
 
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+}
 </style>
