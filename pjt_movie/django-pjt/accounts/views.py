@@ -178,13 +178,17 @@ def diary(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
     
-# 일기 수정, 삭제
-@api_view(['PUT', 'DELETE'])
+# 일기 상세보기, 수정, 삭제
+@api_view(['GET', 'PUT', 'DELETE'])
 @login_required
 def diary_update(request, diary_id):
     user = request.user
     diary = get_object_or_404(Diary, id=diary_id)
-    if request.method == 'PUT':
+    if request.method == 'GET':
+        if user == diary.user:
+            serializer = DiarySerializer(diary)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PUT':
         if user == diary.user:
             serializer = DiarySerializer(diary, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
