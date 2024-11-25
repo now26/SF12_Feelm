@@ -24,6 +24,8 @@ urlpatterns = [
     
     # mypage
     path('mypage/', views.mypage, name='mypage'),
+    # mypage에서 내 정보 기반으로 영화 추천
+    path('mypage/recom/', views.mypage_recom, name='mypage_recom'),
     # 일기쓰기
     path('mypage/diary/', views.diary, name='diary'),
     # 일기 수정, 삭제
