@@ -22,6 +22,7 @@ const logout = () => {
         <RouterLink :to="{name: 'MovieView'}">Movies</RouterLink>
         <RouterLink :to="{name: 'MovieTmdbView'}">TMDB</RouterLink>
         <RouterLink :to="{name: 'ArticleView'}">Articles</RouterLink>
+        <RouterLink :to="{name: 'MyContentView'}">Contents</RouterLink>
       </span>
       <span class="userNav">
         <!-- <input type="text" placeholder="Search..." class="search-bar" /> -->
@@ -36,7 +37,7 @@ const logout = () => {
     <nav class="navMain">
       <RouterLink :to="{name: 'HomeView'}">Home</RouterLink>
       <RouterLink :to="{name: 'MovieView'}">Movies</RouterLink>
-      <RouterLink :to="{name: 'ArticleView'}">Articles</RouterLink>
+      <!-- <RouterLink :to="{name: 'ArticleView'}">Articles</RouterLink> -->
       <RouterLink :to="{name: 'SignUpView'}">Sign Up</RouterLink>
       <RouterLink :to="{name: 'LogInView'}">Log In</RouterLink>
     </nav>
