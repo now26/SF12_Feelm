@@ -58,7 +58,7 @@ def movie_detail(request, tmdb_id):
         
         # 특정 영화 정보와 관련된 추천
         recommendations = movie_recommendation_system_combined(
-            "C:/Users/SSAFY/Desktop/새 폴더 (4)/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop.json", 
+            r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json", 
             movie.title, 
             'title', 'production_com', 'original_lang', 'genre', 'keyword', 
             5, 1, 5, 3, 2, 

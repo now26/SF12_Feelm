@@ -8,6 +8,8 @@ import UserInfo from '@/components/User/UserInfo.vue'
 import ReviewView from '@/views/User/ReviewView.vue'
 import ReviewDetailView from '@/views/User/ReviewDetailView.vue'
 import ReviewList from '@/components/User/ReviewList.vue'
+import ReviewCreateView from '@/views/Review/ReviewCreateView.vue'
+
 
 import TabsView from '@/views/TabsView.vue'
 
@@ -40,6 +42,11 @@ const userRouter = createRouter({
       name: 'ReviewDetailView',
       component: ReviewDetailView
     },
+    {
+      path: '/review/create',
+      name: 'ReviewCreateView',
+      component: ReviewCreateView
+    }
 
   ],
 })

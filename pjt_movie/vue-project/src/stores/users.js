@@ -41,6 +41,7 @@ export const useUserStore = defineStore('user', () => {
   // }
 
   return {
+    DB_BASE_URL,
     userInfo,
     getUserInfo
   }

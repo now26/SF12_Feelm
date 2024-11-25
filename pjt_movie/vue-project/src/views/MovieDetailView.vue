@@ -6,6 +6,7 @@ import { useCounterStore } from '@/stores/counter';
 import { useMovieStore } from '@/stores/movies';
 
 import { useRoute } from 'vue-router';
+import { RouterLink } from 'vue-router'
 
 // 날짜 형식 변경
 import { format } from 'date-fns'
@@ -29,7 +30,7 @@ onMounted(() => {
   })
   .then((res) => {
     movieDetail.value = res.data
-    // console.log(res.data)
+    // console.log(res.data.movie_detail)
   })
   .catch((err) => {
     console.log(err)
@@ -45,33 +46,65 @@ const formateDate = (dateString) => {
 
 
 <template>
-  <div v-if="movieDetail !== null">
-    <!-- <h1>Movie Detail</h1> -->
-    <h1>{{ movieDetail.title }}</h1>
+  <!-- 
+  <pre>
+    {{ movieDetail }}
+  </pre> 
+  -->
+ 
+  <!-- {{ movieDetail }} -->
+  <!-- {{ movieDetail !== null }} -->
+  <!-- {{ movieDetail.movie_recommend }} -->
+
+  <h1>Movie Detail</h1>
+  
+  <div v-if="movieDetail && movieDetail.movie_detail">
+    <h1>{{ movieDetail.movie_detail.title }}</h1>
     <div>
       <div>
         <!-- 포스터 이미지 표시 -->
-        <img class="img_Poster" :src="movieDetail.poster_url" alt="img_Poster" v-if="movieDetail.poster_url">
+        <img class="img_Poster" :src="movieDetail.movie_detail.poster_url" alt="img_Poster" v-if="movieDetail.movie_detail.poster_url">
       </div>
   
       <div>
-        <p>genre : {{  movieDetail.genre }}</p>
-        <p>tagline : {{ movieDetail.tagline }}</p>
-        <p>overview : {{ movieDetail.overview }}</p>
+        <p>genre : {{ movieDetail.movie_detail.genre }}</p>
+        <p>tagline : {{ movieDetail.movie_detail.tagline }}</p>
+        <p>overview : {{ movieDetail.movie_detail.overview }}</p>
 
         <!-- 날짜 포맷 변경 -->
-        <!-- <p>release_date : {{ formateDate(movieDetail.release_date) }} KST</p> -->
-        <p>release_date : {{ movieDetail.release_date ? formateDate(movieDetail.release_date) : 'Loading...' }} KST</p> 
-        <p>runtime : {{ movieDetail.runtime }}</p>
-        <p>status : {{ movieDetail.status }}</p>
-        <p>vote_avg : {{ movieDetail.vote_avg }}</p>
-        <p>vote_count : {{ movieDetail.vote_count }}</p>
-        <p>review : {{ movieDetail.reviews }}</p>
-        <!-- <p>{{ movie.poster_url }}</p>
-        <p>{{ movie.backdrop_url }}</p> -->
+        <!-- <p>release_date : {{ formateDate(movieDetail.movie_detail.release_date) }} KST</p> -->
+        <p>release_date : {{ movieDetail.movie_detail.release_date ? formateDate(movieDetail.movie_detail.release_date) : 'Loading...' }} KST</p> 
+        <p>runtime : {{ movieDetail.movie_detail.runtime }}</p>
+        <p>status : {{ movieDetail.movie_detail.status }}</p>
+        <p>vote_avg : {{ movieDetail.movie_detail.vote_avg }}</p>
+        <p>vote_count : {{ movieDetail.movie_detail.vote_count }}</p>
       </div>
-
     </div>
+  </div>
+
+  <br>
+  <h1>Reviews</h1>
+  <div  v-if="movieDetail && movieDetail.movie_detail">
+    <div>
+      <router-link 
+        :to="{name: 'ReviewCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}">
+        Create
+      </router-link>
+    </div>
+
+    <p>review : 
+      <pre>
+        {{ movieDetail.movie_detail.reviews }}
+      </pre>
+    </p>
+  </div>
+
+  <br>
+  <h1>Recommend Movies</h1>
+  <div v-if="movieDetail && movieDetail.movie_recommend">
+    <pre>
+      {{ movieDetail.movie_recommend }}
+    </pre>
   </div>
 </template>
 

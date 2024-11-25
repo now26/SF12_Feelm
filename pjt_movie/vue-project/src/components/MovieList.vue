@@ -9,7 +9,6 @@ const movieStore = useMovieStore()
 <template>
 
   <!-- <h3>MovieList</h3> -->
-
   <div class="movie-list">
     <MovieListItem 
       v-for="movie in movieStore.movies_db"
