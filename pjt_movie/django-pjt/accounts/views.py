@@ -18,6 +18,10 @@ from .renders import UserJSONRenderer
 
 from movies.models import Movie, Review
 
+import pandas as pd
+from movies.serializers import MovieListSerializer
+from algo import movie_recommendation_system_combined, movie_recommendation_system_combined_bookmark
+
 # 회원가입
 class SignupAPIView(APIView):
     permission_classes = (AllowAny,)
@@ -118,9 +122,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         
 
 ### 마이페이지, 회원 정보 조회, 회원 탈퇴
-import pandas as pd
-from movies.serializers import MovieListSerializer
-import movies.views
+
 @api_view(['GET', 'DELETE'])
 @login_required
 def mypage(request):
@@ -139,12 +141,22 @@ def mypage_recom(request):
     if request.method == 'GET':
         # 북마크 기반 추천
         bookmark_list = list(request.user.bookmark.all().values())
+        # print(bookmark_list)
         # DataFrame 생성
         bookmark = pd.DataFrame(bookmark_list)
-        # print(bookmark)
-        movies_rec = movies.views.movie_recommendation_system_combined_bookmark("C:/Users/SSAFY/Desktop/새 폴더 (4)/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/moviepopular.json", bookmark, 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 2, 1, 1, 2, 1.8, 1.8, 10)
+        print(bookmark)
+        movies_rec = movie_recommendation_system_combined_bookmark(
+            "C:/Users/SSAFY/Desktop/새 폴더 (4)/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop.json", 
+            bookmark, 
+            'title', 'production_com', 'original_lang', 'genre', 'keyword', 
+            5, 1, 5, 3, 2, 
+            20
+        )
+        # print(movies_rec)
         movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
+        # print(movies_recom)
         serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+        # print(serializer_bookmark.data)
         return Response(serializer_bookmark.data)
         
 
