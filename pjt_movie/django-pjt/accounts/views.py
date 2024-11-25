@@ -118,6 +118,9 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         
 
 ### 마이페이지, 회원 정보 조회, 회원 탈퇴
+import pandas as pd
+from movies.serializers import MovieListSerializer
+import movies.views
 @api_view(['GET', 'DELETE'])
 @login_required
 def mypage(request):
@@ -129,6 +132,22 @@ def mypage(request):
         user.delete()
         return Response({'message':'탈퇴 성공'}, status=status.HTTP_202_ACCEPTED)
     
+@api_view(['GET'])
+@login_required
+def mypage_recom(request):
+    user = request.user
+    if request.method == 'GET':
+        # 북마크 기반 추천
+        bookmark_list = list(request.user.bookmark.all().values())
+        # DataFrame 생성
+        bookmark = pd.DataFrame(bookmark_list)
+        # print(bookmark)
+        movies_rec = movies.views.movie_recommendation_system_combined_bookmark("C:/Users/SSAFY/Desktop/새 폴더 (4)/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/moviepopular.json", bookmark, 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 2, 1, 1, 2, 1.8, 1.8, 10)
+        movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
+        serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+        return Response(serializer_bookmark.data)
+        
+
 # 일기 목록, 작성
 @api_view(['GET', 'POST'])
 @login_required

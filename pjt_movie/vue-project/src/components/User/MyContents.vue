@@ -14,8 +14,8 @@ const userDB = userStore.userInfo
     <div>
   
       <div>
-        <p>live_movies : {{ userDB.live_movies }}</p>
-        <p>live_review : {{ userDB.live_review }}</p>
+        <p>like_movies : {{ userDB.like_movies }}</p>
+        <p>like_reviews : {{ userDB.like_reviews }}</p>
       </div>
     </div>
   </div>
