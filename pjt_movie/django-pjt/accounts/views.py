@@ -167,8 +167,8 @@ def mypage_recom(request):
             rating_rec = movie_recommendation_system_combined_rating(
                 "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json",
                 rating_df,
-                'title', 'overview', 'original_lang', 'genre', 'keyword', 
-                3, 3, 1, 2.5, 1.5, 
+                'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+                4, 4, 1, 1, 3, 2.5, 
                 20
             )
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
@@ -186,8 +186,8 @@ def mypage_recom(request):
             movies_rec = movie_recommendation_system_combined_bookmark(
                 "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
                 bookmark, 
-                'title', 'production_com', 'original_lang', 'genre', 'keyword', 
-                5, 1, 5, 3, 2, 
+                'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+                5, 2, 1, 3, 4, 4, 
                 20
             )
             movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
