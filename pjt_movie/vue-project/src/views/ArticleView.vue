@@ -21,14 +21,18 @@ onMounted(()=>{
   
   <div id="page">
 
-    <div>
-      <nav>
-        <RouterLink :to="{name: 'ArticleCreateView'}" class="createBtn">Create</RouterLink>
-      </nav>
-    </div>
     
     <div class="note">
       <div class="background">
+        <header>
+          <p>Article List</p>
+        </header>
+        <div>
+          <nav>
+            <RouterLink :to="{name: 'ArticleCreateView'}" class="createBtn">Create</RouterLink>
+          </nav>
+        </div>
+
         <div id="pageD">
           <ArticleList/>
         </div>
@@ -40,6 +44,13 @@ onMounted(()=>{
 
 
 <style scoped>
+p {
+  font-size: 1.5rem;
+  color:rgb(16, 16, 77);
+  font-weight: bolder;
+  padding-bottom: 30px;
+}
+
 header {
   display: flex;
   justify-content: center;
@@ -53,7 +64,7 @@ h1 {
 
 .createBtn{
   font-size: 1.5rem;
-  color: aliceblue;
+  color: #333;
   text-decoration-line: none;
   display: flex;
   justify-content: flex-end;

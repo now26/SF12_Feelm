@@ -51,7 +51,7 @@ const profileImageUrl = computed(() => {
           <p class="info">age : {{ userDB.age }}</p>
           <p class="info">gender : {{ userDB.gender }}</p>
         
-          <router-link :to="{name : 'UpdateUserInfoView'}" >회원정보 변경</router-link>
+          <router-link :to="{name : 'UpdateUserInfoView'}" class="btn">회원정보 변경</router-link>
         </div>
       </div>
 
@@ -102,4 +102,20 @@ header {
   margin-bottom: 20px;
 }
 
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-decoration-line: none;
+  /* margin-top: px; */
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
 </style>

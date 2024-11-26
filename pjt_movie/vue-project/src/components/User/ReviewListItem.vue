@@ -51,7 +51,8 @@ const deleteReview = (tmdb_id, review_id) => {
       <p>Movie : {{ review.movie.title }}</p>
       <p>Contents : {{ review.content }}</p>
       <p>Ratings : {{ review.rating }}</p>
-      <button @click.prevent="deleteReview(review.movie.tmdb_id, review.id)">리뷰 삭제</button>
+      <button @click.prevent="deleteReview(review.movie.tmdb_id, review.id)" class="btn">리뷰 삭제</button>
+      <button class="btn">좋아요</button>
     </ul>
     <hr>
   </div>
@@ -60,4 +61,22 @@ const deleteReview = (tmdb_id, review_id) => {
 
 <style scoped>
 
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-decoration-line: none;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
 </style>

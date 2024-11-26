@@ -84,19 +84,6 @@ const toggleBookmark = (movie) => {
 <template>
   <div id="page">
     <h1>Movie Detail</h1>
-  
-    <div v-if="movieDetail && movieDetail.movie_detail" >
-      <button @click="toggleBookmark(movieDetail.movie_detail)" class="bookmark-btn">
-        {{ contentStore.isBookmarked(movieDetail.movie_detail.tmdb_id) ? '북마크 취소' : '북마크 추가'}}
-      </button>
-    </div>
-  
-    <div v-if="movieDetail && movieDetail.movie_detail">
-      <router-link 
-        :to="{name: 'DiaryCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}" class="bookmark-btn2">
-        일기쓰기
-      </router-link>
-    </div>
     
     <div v-if="movieDetail && movieDetail.movie_detail">
       <h1>{{ movieDetail.movie_detail.title }}</h1>
@@ -105,12 +92,12 @@ const toggleBookmark = (movie) => {
           <!-- 포스터 이미지 표시 -->
           <img class="img_Poster" :src="movieDetail.movie_detail.poster_url" alt="img_Poster" v-if="movieDetail.movie_detail.poster_url">
         </div>
-    
+        
         <div>
           <p>genre : {{ movieDetail.movie_detail.genre }}</p>
           <p>tagline : {{ movieDetail.movie_detail.tagline }}</p>
           <p>overview : {{ movieDetail.movie_detail.overview }}</p>
-  
+          
           <!-- 날짜 포맷 변경 -->
           <!-- <p>release_date : {{ formatDate(movieDetail.movie_detail.release_date) }} KST</p> -->
           <p>release_date : {{ movieDetail.movie_detail.release_date ? formatDate(movieDetail.movie_detail.release_date) : 'Loading...' }} KST</p> 
@@ -121,27 +108,30 @@ const toggleBookmark = (movie) => {
         </div>
       </div>
     </div>
-  
+    
+    <div class="btns">
+      <div v-if="movieDetail && movieDetail.movie_detail" >
+        <button @click="toggleBookmark(movieDetail.movie_detail)" class="bookmark-btn">
+          {{ contentStore.isBookmarked(movieDetail.movie_detail.tmdb_id) ? '북마크 취소' : '북마크 추가'}}
+        </button>
+      </div>
+    
+      <div v-if="movieDetail && movieDetail.movie_detail">
+        <router-link 
+          :to="{name: 'DiaryCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}" class="bookmark-btn2">
+          일기쓰기
+        </router-link>
+      </div>
+    </div>
+    
     <br>
     <h1>Reviews</h1>
-    <div  v-if="movieDetail && movieDetail.movie_detail">
+    <div  v-if="movieDetail && movieDetail.movie_detail" class="review">
       <!-- <MovieReviews :movie_db="JSON.stringify(movieDetail.movie_detail)" /> -->
       <MovieReviews 
         :movie_tmdb_id="movieDetail.movie_detail.tmdb_id"
         :movie_reviews="movieDetail.movie_detail.reviews" 
       />
-      <!-- <div>
-        <router-link 
-          :to="{name: 'ReviewCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}">
-          Create
-        </router-link>
-      </div>
-  
-      <p>review : 
-        <pre>
-          {{ movieDetail.movie_detail.reviews }}
-        </pre>
-      </p> -->
     </div>
   
     <br>
@@ -174,6 +164,12 @@ const toggleBookmark = (movie) => {
 
 
 <style scoped>
+.btns{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
 .img_Poster {
   flex-shrink: 1; 
   width: 400px;
@@ -303,6 +299,7 @@ b {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  text-decoration: none;
 }
 
 .bookmark-btn2:hover {

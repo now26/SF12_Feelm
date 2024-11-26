@@ -3,9 +3,12 @@ import { ref, computed, onMounted } from 'vue';  // Vue 3에서 Composition API�
 
 import MyBookMarksList from '@/components/User/MyBookMarksList.vue';
 import MyContents from '@/components/User/MyContents.vue';
+import RcContentBased from '@/components/Content/RcContentBased.vue';
+import RcUserBased from '@/components/Content/RcUserBased.vue';
 
 // `tabs`는 탭 목록을 배열로 정의
-const tabs = ['BookMarks', 'MyContents']
+// const tabs = ['BookMarks', 'MyContents', 'Rc_ContentBased', 'Rc_UserBased']
+const tabs = ['BookMarks', 'Rc_ContentBased', 'Rc_UserBased']
 
 // 로컬스토리지에서 저장된 탭 상태를 가져오기. 없으면 기본값 'MyInfo'
 const savedTab = localStorage.getItem('currentTab')
@@ -24,6 +27,8 @@ const setCurrentTab = (tab) => {
 const currentTabComponent = computed(() => {
     if (currentTab.value === 'BookMarks') return MyBookMarksList
     if (currentTab.value === 'MyContents') return MyContents
+    if (currentTab.value === 'Rc_ContentBased') return RcContentBased
+    if (currentTab.value === 'Rc_UserBased') return RcUserBased
 })
 
 

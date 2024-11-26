@@ -8,10 +8,6 @@ const useStore = useCounterStore()
 
 <template>
   <div>
-    <header>
-      <p>Article List</p>
-    </header>
-
     <ArticleListItem
       v-for="test in useStore.tests"
       :key="test.id"

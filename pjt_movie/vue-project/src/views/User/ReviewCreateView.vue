@@ -96,7 +96,7 @@ const createReview = () => {
             <p>선택한 평점: {{ rating }}</p>
           </div> -->
 
-          <button type="submit">submit</button>
+          <button type="submit" class="btn">submit</button>
         </form>
 
 
@@ -114,6 +114,20 @@ const createReview = () => {
 
 
 <style scoped>
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-decoration-line: none;
+}
 
+.btn:hover {
+  background-color: #0056b3;
+}
 
 </style>

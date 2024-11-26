@@ -24,8 +24,11 @@ urlpatterns = [
     
     # mypage
     path('mypage/', views.mypage, name='mypage'),
-    # mypage에서 내 정보 기반으로 영화 추천
-    path('mypage/recom/', views.mypage_recom, name='mypage_recom'),
+    # mypage에서 내 정보 기반으로 영화 추천 //북마크 기반
+    path('mypage/recom1/', views.mypage_recom1, name='mypage_recom1'),
+    # mypage에서 내 정보 기반으로 영화 추천 //리뷰 기반
+    path('mypage/recom2/', views.mypage_recom2, name='mypage_recom2'),
+    
     # 일기쓰기
     path('mypage/diary/', views.diary, name='diary'),
     # 일기 수정, 삭제
