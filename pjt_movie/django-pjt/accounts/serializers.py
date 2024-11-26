@@ -33,7 +33,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
                     'poster_path',
                 )
         movie = MovieSerializer(read_only=True)
-
         class Meta:
             model = Review
             fields = (
@@ -50,8 +49,8 @@ class UserInfoSerializer(serializers.ModelSerializer):
     # 유저가 좋아요한 리뷰
     like_reviews = ReviewSerializer(many=True, read_only=True, source='like_reviews.all')
     # 유저가 작성한 리뷰
+    # reviews = ReviewSerializer(many=True, read_only=True, source='reviews.all')
     reviews = ReviewSerializer(many=True, read_only=True, source='reviews.all')
-    
     class Meta:
         model = User
         fields = (
