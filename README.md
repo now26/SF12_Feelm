@@ -101,6 +101,33 @@ pjt10
 
 
 ## 6. 생성형 AI 
+__perplexity.ai__ 사용
+1. 유저, 영화 Fixtures 만들기  
+- 예시 데이터
+- 각 필드에 대한 상세 정보 제공
+- 답변
+  - 유저와 영화 데이터에 대한 데이터를 json 파일로 만들 수 있는 python 코드 제공  
+<img src="pic\gpt.png" width="200" height="200">
+<img src="pic\gpt3.png" width="170" height="100">
+<img src="pic\gpt1.png" width="200" height="200">
+<img src="pic\gpt2.png" width="200" height="190">
+
+2. 데이터 가공 (추천 알고리즘에 사용)에 대한 코드 질문
+- 라이브러리와 그 쓰임새에 대한 질문
+  - 그 답변을 바탕으로 추천 알고리즘을 구성할 때 사용
+- 유사도를 구성할 때 가중치에 대한 참고 질문
+  - 그 답변을 바탕으로 여러 추천에 대한 가중치 설정  
+<img src="pic\pd.png" width="250" height="90">
+
+<img src="pic\pd1.png" width="200" height="190">
+<img src="pic\pd2.png" width="200" height="190">  
+
+<img src="pic\sim.png" width="200" height="100">
+
+<img src="pic\sim1.png" width="200" height="100">
+<img src="pic\sim2.png" width="200" height="100">
+
+
 
 ## 7. 후기
 ### 박수연

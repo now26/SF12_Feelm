@@ -134,9 +134,94 @@ def mypage(request):
         user.delete()
         return Response({'message':'탈퇴 성공'}, status=status.HTTP_202_ACCEPTED)
     
+# @api_view(['GET'])
+# @login_required
+# def mypage_recom(request):
+#     user = request.user
+#     if request.method == 'GET':
+#         movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
+        
+#         # 리뷰 평점 기반 추천
+#         user_reviews = user.reviews.values('movie_id', 'rating')
+#         movie_id = []
+#         tmdb_id = []
+#         rating = []
+#         for review in user_reviews:
+#             movie_id.append(review['movie_id']-1)
+#             rating.append(review['rating'])
+#             tmdb = Movie.objects.get(id=review['movie_id'])
+#             tmdb_id.append(tmdb)
+
+#         rating_df = pd.DataFrame({'movie_id':movie_id, 'tmdb_id':tmdb_id, 'rating':rating})
+
+#         if rating_df.empty:
+#             rating_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
+#             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec['tmdb_id'].tolist())
+#         else:
+#             rating_rec = movie_recommendation_system_combined_rating(
+#                 "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json",
+#                 rating_df,
+#                 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+#                 4, 4, 1, 1, 3, 2.5, 
+#                 20
+#             )
+#             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
+
+#         # 북마크 기반 추천
+#         bookmark_list = list(request.user.bookmark.all().values())
+#         # DataFrame 생성
+#         bookmark = pd.DataFrame(bookmark_list)
+
+#         if bookmark.empty:
+#             movies_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
+#             movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec['tmdb_id'].tolist())
+#         else:
+#             movies_rec = movie_recommendation_system_combined_bookmark(
+#                 "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
+#                 bookmark, 
+#                 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+#                 5, 2, 1, 3, 4, 4, 
+#                 20
+#             )
+#             movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
+        
+#         serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+#         serializer_rating = MovieListSerializer(rating_recom, many=True)
+#         return Response({'review_recommendations':serializer_rating.data, 'bookmark_reccomendations': serializer_bookmark.data})
+
+# 북마크 추천
 @api_view(['GET'])
 @login_required
-def mypage_recom(request):
+def mypage_recom1(request):
+    user = request.user
+    if request.method == 'GET':
+        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
+
+        # 북마크 기반 추천
+        bookmark_list = list(request.user.bookmark.all().values())
+        # DataFrame 생성
+        bookmark = pd.DataFrame(bookmark_list)
+
+        if bookmark.empty:
+            movies_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
+            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec['tmdb_id'].tolist())
+        else:
+            movies_rec = movie_recommendation_system_combined_bookmark(
+                "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
+                bookmark, 
+                'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+                5, 2, 1, 3, 4, 4, 
+                20
+            )
+            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
+        
+        serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+        return Response(serializer_bookmark.data)
+
+# 리뷰 추천
+@api_view(['GET'])
+@login_required
+def mypage_recom2(request):
     user = request.user
     if request.method == 'GET':
         movies_df = load_movie_data(r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json")
@@ -166,28 +251,8 @@ def mypage_recom(request):
                 20
             )
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
-
-        # 북마크 기반 추천
-        bookmark_list = list(request.user.bookmark.all().values())
-        # DataFrame 생성
-        bookmark = pd.DataFrame(bookmark_list)
-
-        if bookmark.empty:
-            movies_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
-            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec['tmdb_id'].tolist())
-        else:
-            movies_rec = movie_recommendation_system_combined_bookmark(
-                r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json", 
-                bookmark, 
-                'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
-                5, 2, 1, 3, 4, 4, 
-                20
-            )
-            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
-        
-        serializer_bookmark = MovieListSerializer(movies_recom, many=True)
         serializer_rating = MovieListSerializer(rating_recom, many=True)
-        return Response({'review_recommendations':serializer_rating.data, 'bookmark_reccomendations': serializer_bookmark.data})
+        return Response(serializer_rating.data)
 
 
 # 일기 목록, 작성
