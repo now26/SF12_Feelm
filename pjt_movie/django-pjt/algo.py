@@ -16,7 +16,7 @@ def load_movie_data(json_file_path):
 
 
 # 추천 알고리즘
-def calculate_combined_weighted_similarity(movies_df, field1, field2, field3, field4, field5, weight1, weight2, weight3, weight4, weight5):
+def calculate_combined_weighted_similarity(movies_df, field1, field2, field3, field4, field5, field6, weight1, weight2, weight3, weight4, weight5, weight6):
     # 장르와 키워드를 결합
     
     combined_features = movies_df.apply(
@@ -24,7 +24,8 @@ def calculate_combined_weighted_similarity(movies_df, field1, field2, field3, fi
         "{} ".format(' '.join([row[field2]] * int(weight2) if row[field2]!="" else '-')) +
         "{} ".format(' '.join([row[field3]] * int(weight3) if row[field3]!="" else '-')) +
         "{} ".format(' '.join([row[field4]] * int(weight4) if row[field4]!="" else '-')) +
-        "{}".format(' '.join([row[field5]] * int(weight5) if row[field5]!="" else '-')), axis=1)
+        "{} ".format(' '.join([row[field5]] * int(weight5) if row[field5]!="" else '-')) +
+        "{}".format(' '.join([row[field6]] * int(weight6) if row[field6]!="" else '-')), axis=1)
     
     count_vect = CountVectorizer(min_df=1, ngram_range=(1, 2))
     combined_mat = count_vect.fit_transform(combined_features)
@@ -56,13 +57,13 @@ def find_sim_movie_combined(df, sorted_ind, title_name, top_n=10):
     return list(result[['tmdb_id'][0]])
 
 
-def movie_recommendation_system_combined(json_file_path, title_name, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5, top_n=10):
+def movie_recommendation_system_combined(json_file_path, title_name, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6, top_n=10):
     # 데이터 로드
     movies_df = load_movie_data(json_file_path)
     # print(movies_df)
     
     # 유사도 계산
-    combined_sim = calculate_combined_weighted_similarity(movies_df, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5)
+    combined_sim = calculate_combined_weighted_similarity(movies_df, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6)
     
     # 유사도 정렬
     combined_sim_sorted_ind = combined_sim.argsort()[:, ::-1]
@@ -75,7 +76,7 @@ def movie_recommendation_system_combined(json_file_path, title_name, key1, key2,
 
 # ============================================
 # 북마크 기반 추천
-def calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, field1, field2, field3, field4, field5, weight1, weight2, weight3, weight4, weight5):
+def calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, field1, field2, field3, field4, field5, field6, weight1, weight2, weight3, weight4, weight5, weight6):
     bookmark = pd.DataFrame(bookmark)
     
     # 북마크된 영화들의 특성을 결합
@@ -84,7 +85,8 @@ def calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, field1,
         "{} ".format(' '.join([str(row[field2]) if pd.notna(row[field2]) and row[field2] != '' else '-'] * int(weight2))) +
         "{} ".format(' '.join([str(row[field3]) if pd.notna(row[field3]) and row[field3] != '' else '-'] * int(weight3))) +
         "{} ".format(' '.join([str(row[field4]) if pd.notna(row[field4]) and row[field4] != '' else '-'] * int(weight4))) +
-        "{}".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * int(weight5))), axis=1
+        "{} ".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * int(weight5))) +
+        "{}".format(' '.join([str(row[field6]) if pd.notna(row[field6]) and row[field6] != '' else '-'] * int(weight6))), axis=1
     )
     
     # 북마크된 모든 영화의 특성을 하나로 결합
@@ -96,7 +98,8 @@ def calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, field1,
         "{} ".format(' '.join([str(row[field2]) if pd.notna(row[field2]) and row[field2] != '' else '-'] * int(weight2))) +
         "{} ".format(' '.join([str(row[field3]) if pd.notna(row[field3]) and row[field3] != '' else '-'] * int(weight3))) +
         "{} ".format(' '.join([str(row[field4]) if pd.notna(row[field4]) and row[field4] != '' else '-'] * int(weight4))) +
-        "{}".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * int(weight5))), axis=1
+        "{} ".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * int(weight5))) +
+        "{}".format(' '.join([str(row[field6]) if pd.notna(row[field6]) and row[field6] != '' else '-'] * int(weight6))), axis=1
     )
     
     # 북마크 특성을 전체 특성에 추가
@@ -134,12 +137,12 @@ def find_sim_movie_combined_bookmark(df, sorted_ind, bookmark, top_n=10):
     result = df.iloc[similar_indexes][:top_n]
     return list(result[['tmdb_id'][0]])
 
-def movie_recommendation_system_combined_bookmark(json_file_path, bookmark, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5, top_n=10):
+def movie_recommendation_system_combined_bookmark(json_file_path, bookmark, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6, top_n=10):
     # 데이터 로드
     movies_df = load_movie_data(json_file_path)
     
     # 유사도 계산
-    combined_sim = calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5)
+    combined_sim = calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6)
     
     # 유사도 정렬
     combined_sim_sorted_ind = combined_sim.argsort()[:, ::-1]
@@ -161,7 +164,7 @@ def apply_review_weight(tmdb_id, rating_df, review_weight=4):
         return weight
     return 1
 
-def calculate_combined_similarity_rating(movies_df, rating_df, field1, field2, field3, field4, field5, weight1, weight2, weight3, weight4, weight5):
+def calculate_combined_similarity_rating(movies_df, rating_df, field1, field2, field3, field4, field5, field6, weight1, weight2, weight3, weight4, weight5, weight6):
     # rating_df : 이미 데이터 프레임
     # movie_id, rating을 col으로 가지고 있음
     
@@ -171,7 +174,8 @@ def calculate_combined_similarity_rating(movies_df, rating_df, field1, field2, f
         "{} ".format(' '.join([str(row[field2]) if pd.notna(row[field2]) and row[field2] != '' else '-'] * (int(weight2) * apply_review_weight(row['tmdb_id'], rating_df, 4)))) +
         "{} ".format(' '.join([str(row[field3]) if pd.notna(row[field3]) and row[field3] != '' else '-'] * (int(weight3) * apply_review_weight(row['tmdb_id'], rating_df, 4)))) +
         "{} ".format(' '.join([str(row[field4]) if pd.notna(row[field4]) and row[field4] != '' else '-'] * (int(weight4) * apply_review_weight(row['tmdb_id'], rating_df, 4)))) +
-        "{}".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * (int(weight5) * apply_review_weight(row['tmdb_id'], rating_df, 4)))), axis=1
+        "{} ".format(' '.join([str(row[field5]) if pd.notna(row[field5]) and row[field5] != '' else '-'] * (int(weight5) * apply_review_weight(row['tmdb_id'], rating_df, 4)))) +
+        "{}".format(' '.join([str(row[field6]) if pd.notna(row[field6]) and row[field6] != '' else '-'] * (int(weight6) * apply_review_weight(row['tmdb_id'], rating_df, 4)))), axis=1
     )
     
     # 벡터화 및 유사도 계산
@@ -197,12 +201,12 @@ def find_sim_movie_combined_rating(df, sorted_ind, rating_df, top_n=10):
     result = df.iloc[similar_indexes][:top_n]
     return list(result[['tmdb_id'][0]])
 
-def movie_recommendation_system_combined_rating(json_file_path, rating_df, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5, top_n=10):
+def movie_recommendation_system_combined_rating(json_file_path, rating_df, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6, top_n=10):
     # 데이터 로드
     movies_df = load_movie_data(json_file_path)
     
     # 유사도 계산
-    combined_sim = calculate_combined_similarity_rating(movies_df, rating_df, key1, key2, key3, key4, key5, weight1, weight2, weight3, weight4, weight5)
+    combined_sim = calculate_combined_similarity_rating(movies_df, rating_df, key1, key2, key3, key4, key5, key6, weight1, weight2, weight3, weight4, weight5, weight6)
     
     # 유사도 정렬
     combined_sim_sorted_ind = combined_sim.argsort()[:, ::-1]

@@ -65,8 +65,8 @@ def movie_detail(request, tmdb_id):
         recommendations = movie_recommendation_system_combined(
             "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
             movie.title, 
-            'title', 'production_com', 'original_lang', 'genre', 'keyword', 
-            5, 1, 5, 3, 2, 
+            'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
+            5, 1, 2, 3, 5, 4, 
             20
         )
         print(recommendations)
