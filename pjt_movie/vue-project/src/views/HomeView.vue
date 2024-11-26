@@ -1,9 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import axios from 'axios';
+import { RouterLink } from 'vue-router'
 
 import { useCounterStore } from '@/stores/counter';
 import { useMovieStore } from '@/stores/movies';
+
+import MoviePopular from '@/components/Movie_tmdb/MoviePopular.vue'
 
 const movieStore = useMovieStore()
 
@@ -31,7 +34,7 @@ onMounted(() => {
 
 function getSliceMovies(movies, count) {
   return movies
-    .slice(0, count) // 처음 20개 항목을 선택
+    .slice(0, count) // 처음 40개 항목을 선택
 }
 
 // 랜덤으로 n개 항목을 뽑는 함수
@@ -42,16 +45,18 @@ function getRandomMovies(movies, count) {
     .slice(0, count) // 처음 10개 항목을 선택
 }
 
-// 배너 자동 슬라이드
+
 let currentIndex = 0
 
+// 배너 자동 슬라이드 // 캐러셀
 function startAutoSlide() {
   setInterval(() => {
     currentIndex = (currentIndex + 1) % randomMovies.value.length
     const slider = document.querySelector('.banner-slider')
     slider.style.transform = `translateX(-${currentIndex * 100}%)`
-  }, 5000) // 5초마다 슬라이드
+  }, 8000) // 8초마다 슬라이드
 }
+
 
 // 슬라이드 버튼 이동
 function moveSlide(direction){
@@ -61,81 +66,56 @@ function moveSlide(direction){
     currentIndex = (currentIndex + 1) % randomMovies.value.length
   }
   const slider = document.querySelector('.banner-slider')
-  slider.style.transform = `translate(-${currentIndex * 100}%)`
+  slider.style.transform = `translateX(-${currentIndex * 100}%)`
 }
-
 
 </script>
 
 
 <template>
-  <div>
+  <div id="page">
+
     <!-- <h1>Home</h1> -->
-    <div>
+    <div class="bannerSection">
+
       <!-- Banner Section -->
       <section class="banner">
+
+        <!-- 슬라이더 이미지 동적 생성 -->
         <div class="banner-slider">
-          <!-- 슬라이더 이미지 동적 생성 -->
           <img 
             v-for="(movie, index) in randomMovies"
-            :key="movie.id"
+            :key="movie.tmdb_id"
             :src="movie.backdrop_url"
             :alt="'Banner' + (index + 1)"
             class="banner-image"
           />
         </div>
+
+
+        <!-- 슬라이드 수동 이동 버튼 -->
+        <button @click="moveSlide('prev')" class="prev-button"> < </button>
+        <button @click="moveSlide('next')" class="next-button"> > </button>
       </section>
-  
-      <!-- 슬라이드 수동 이동 버튼 -->
-      <button @click="moveSlide('prev')" class="prev-button"> < </button>
-      <button @click="moveSlide('next')" class="next-button"> > </button>
     </div>
 
-    <div>
-      Top 20 영화
-    </div>
-
-    <div>
-      if - 로그인 시,
-      사용자 정보 기반 추천 영화
-    </div>
-
-    <div>
-      if - 로그인 시,
-      사용자 정보 기반 북마크 영화
-    </div>
-
-    <div>
-      <hr>
-      메뉴바 구성
-      - Home (배너와 영화 상세 정보 페이지 연결)
-      - Movie (장르 기반 필터링 기능 구현, 영화 카드 디자인, 페이지네이션 기능)
-      - BookMarks (Mypage 내부 Bookmark 상세 페이지 연결)
-      - Review (Mypage 내부 review 상세 페이지 연결)
-      
-      - (가능하면 영화 검색 기능 구현)
-      - Mypage (각 세부페이지 들어가기)
-      - Logout
-    </div>
-    
-    <div>
-      <hr>
-      - 영화 추천 detail 페이지 구현
-      - vue에서 생성한 user가 db에서 보이지 않는 에러 해결 필요
-    </div>
-
-
+    <MoviePopular/>
 
   </div>
 </template>
 
 
 <style scoped>
+.bannerSection {
+  padding-bottom: 30px;
+}
+
 .banner {
   display: grid;
   place-content: center;
   width: 100%;
   height: 530px;
+  border-radius: 10px;
   overflow: hidden; /* 슬라이더 영역 밖으로 나가지 않도록 */
 }
 
@@ -155,7 +135,7 @@ function moveSlide(direction){
 .prev-button,
 .next-button {
   position: absolute;
-  top: 50%;
+  top: 430px;
   transform: translateY(50%);
   background-color: rgba(0, 0, 0, 0);
   color: white;

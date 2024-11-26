@@ -33,7 +33,6 @@ class UserInfoSerializer(serializers.ModelSerializer):
                     'poster_path',
                 )
         movie = MovieSerializer(read_only=True)
-        
         class Meta:
             model = Review
             fields = (

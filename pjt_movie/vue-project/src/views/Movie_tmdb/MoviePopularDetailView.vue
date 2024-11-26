@@ -1,16 +1,28 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { onMounted } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router'
 import { useRouter, useRoute } from 'vue-router'
 import { useMovieStore } from '@/stores/movies';
+import { RouterLink } from 'vue-router'
 
 // Pinia store에서 상태와 함수를 가져오기.
 const movieStore = useMovieStore()
 
+const selectedGenre = ref(null)
+
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
 onMounted(() => {
   movieStore.getMoviePopular(movieStore.po_currentPage)
+  movieStore.getGenres()
 })
+
+onBeforeRouteLeave((to, from, next)=>{
+  movieStore.po_currentPage = 1
+  selectedGenre.value = null
+  next()
+})
+
 
 // 앞으로 1페이지 이동
 const prev1Page = () => {
@@ -123,9 +135,11 @@ const totalPages = computed(() => movieStore.po_totalPages)
 
 <template>
   <div>
-    <h3>Popular Movies</h3>
+    <header>
+      <h1>Popular Movies</h1>
+    </header>
 
-    <div>
+    <div id="page">
 
       <div v-if="movies.length !== null">
         <div class="movie-list">
@@ -134,8 +148,10 @@ const totalPages = computed(() => movieStore.po_totalPages)
             :key="movie.id"
             class="movie-card"
           >
-            <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
-            <p><b>{{ movie.title }}</b></p>
+            <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.id }}">
+              <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
+            </RouterLink>
+            <p class="movieInfo"><b>{{ movie.title }}</b></p>
   
           </div>
         </div>
@@ -153,7 +169,7 @@ const totalPages = computed(() => movieStore.po_totalPages)
       </div> -->
 
       <!-- 페이지 내비게이션 -->
-      <div>
+      <div class="pageCnt">
         <button @click="prevPage" :disabled="currentPage === 1"><<</button>&nbsp;
         <button @click="prev1Page" :disabled="currentPage === 1"><</button>&nbsp;
         
@@ -180,29 +196,58 @@ const totalPages = computed(() => movieStore.po_totalPages)
 
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+  padding-bottom: 50px;
+}
+
 .movie-list {
   /* display: flex; -> 요소 가로로 위치 */
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding-left: 1rem;
+  justify-content: center;
 }
 
 .movie-card {
   /* border: 1px solid #fff; */
   border: 1px none;
-  width: 200px;
   padding: 5px;
 
 }
 
 .movie-poster {
-  width: 100%;
+  flex-shrink: 1;
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+
 }
 
+.movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
+.pageCnt {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  padding-top: 20px;
+  gap: 2px;
+}
 
 button:disabled {
   background-color: #ccc;
-  
   cursor: not-allowed;
 }
 

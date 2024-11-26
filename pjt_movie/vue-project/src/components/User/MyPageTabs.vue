@@ -83,7 +83,6 @@ const currentTabComponent = computed(() => {
 .tab.active {
   background-color: #FFF7D6;
   color: #1C2644;
-  
 }
 
 </style>

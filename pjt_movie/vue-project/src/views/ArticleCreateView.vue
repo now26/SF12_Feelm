@@ -28,7 +28,7 @@ const createArticle = () => {
     }
   })
   .then((res) => {
-    // console.log('success')
+    console.log(res)
     router.push({name: 'ArticleView'})
   })
   .catch((err) => console.log(err))

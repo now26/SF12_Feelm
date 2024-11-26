@@ -161,67 +161,72 @@ const totalPages = computed(() => movieStore.up_totalPages)
 
 <template>
   <div>
-    <h3>Upcoming Movies</h3>
+    <header>
+      <h1>Upcoming Movies</h1>
+    </header>
 
-    <div>
-      <span>검색기간 </span>
-      <input type="date" id="startDate" v-model="startDate">&nbsp;
-      <label for="startDate">~</label>&nbsp;
-
-      <input type="date" id="endDate" v-model="endDate">&nbsp;
-      <label for="endDate"></label>
-      <button @click.prevent="sendDateRange">검색</button>&nbsp;
-      <button @click.prevent="resetRange">초기화</button>
-    </div>
-
-
-    <div>
-      <div v-if="movies.length !== null">
-        <div class="movie-list">
-          <div 
-            v-for="movie in movies"
-            :key="movie.id"
-            class="movie-card"
-          >
-            <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
-            <p><b>{{ movie.title }}</b></p>
+    <div id="page">
+      
+      <div class="selectForm">
+        <span class="selectTxt">검색기간 </span>&nbsp;&nbsp;
+        <input type="date" id="startDate" v-model="startDate" class="inputItem">&nbsp;
+        <label for="startDate" class="selectTxt">~</label>&nbsp;
   
+        <input type="date" id="endDate" v-model="endDate" class="inputItem">&nbsp;
+        <label for="endDate"></label>
+        <button @click.prevent="sendDateRange" class="btn">검색</button>&nbsp;
+        <button @click.prevent="resetRange" class="btn">초기화</button>
+      </div>
+  
+  
+      <div>
+        <div v-if="movies.length !== null">
+          <div class="movie-list">
+            <div 
+              v-for="movie in movies"
+              :key="movie.id"
+              class="movie-card"
+            >
+            <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.id }}">
+              <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
+            </RouterLink>
+            <p class="movieInfo"><b>{{ movie.title }}</b></p>
+            </div>
           </div>
         </div>
+  
+        <div v-else>
+          <p>No Movies</p>
+        </div>
+  
+        <!-- 앞 뒤 1페이지씩 이동할 때 -->
+        <!-- <div>
+          <button @click="prev1Page" :disabled="currentPage === 1">Previous</button>
+          <span Page>&nbsp; {{ currentPage }} of {{ totalPages }} &nbsp;</span>
+          <button @click="next1Page" :disabled="currentPage === totalPages">Next</button>
+        </div> -->
+  
+        <!-- 페이지 내비게이션 -->
+        <div class="pageCnt">
+          <button @click="prevPage" :disabled="currentPage === 1"><<</button>&nbsp;
+          <button @click="prev1Page" :disabled="currentPage === 1"><</button>&nbsp;
+          
+          <!-- 페이지 숫자 목록 -->
+          <span v-for="pageNum in pageNumbers" :key="pageNum">
+            <button
+              @click="goToPage(pageNum)"
+              :class="{ active: pageNum === currentPage }"
+            >
+              {{ pageNum }}
+            </button>
+          </span>
+  
+          <span Page>&nbsp; {{ currentPage }} of {{ totalPages }} &nbsp;</span>
+  
+          &nbsp;<button @click="next1Page" :disabled="currentPage === totalPages">></button>
+          &nbsp;<button @click="nextPage" :disabled="currentPage === totalPages">>></button>
+        </div>
       </div>
-
-      <div v-else>
-        <p>No Movies</p>
-      </div>
-
-      <!-- 앞 뒤 1페이지씩 이동할 때 -->
-      <!-- <div>
-        <button @click="prev1Page" :disabled="currentPage === 1">Previous</button>
-        <span Page>&nbsp; {{ currentPage }} of {{ totalPages }} &nbsp;</span>
-        <button @click="next1Page" :disabled="currentPage === totalPages">Next</button>
-      </div> -->
-
-      <!-- 페이지 내비게이션 -->
-      <div>
-        <button @click="prevPage" :disabled="currentPage === 1"><<</button>&nbsp;
-        <button @click="prev1Page" :disabled="currentPage === 1"><</button>&nbsp;
-        
-        <!-- 페이지 숫자 목록 -->
-        <span v-for="pageNum in pageNumbers" :key="pageNum">
-          <button
-            @click="goToPage(pageNum)"
-            :class="{ active: pageNum === currentPage }"
-          >
-            {{ pageNum }}
-          </button>
-        </span>
-
-        <span Page>&nbsp; {{ currentPage }} of {{ totalPages }} &nbsp;</span>
-
-        &nbsp;<button @click="next1Page" :disabled="currentPage === totalPages">></button>
-        &nbsp;<button @click="nextPage" :disabled="currentPage === totalPages">>></button>
-      </div>
-
     </div>
 
   </div>
@@ -229,30 +234,93 @@ const totalPages = computed(() => movieStore.up_totalPages)
 
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 2.5rem;
+  padding-bottom: 20px;
+}
+
+.selectForm {
+  padding-top: 50px;
+  padding-right: 120px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.selectTxt {
+  font-size: 1.2rem;
+}
+
+.inputItem{
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 5px; 
+}
+
+.btn {
+  width: auto;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
 .movie-list {
   /* display: flex; -> 요소 가로로 위치 */
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding-left: 1rem;
+  justify-content: center;
 }
 
 .movie-card {
   /* border: 1px solid #fff; */
   border: 1px none;
-  width: 200px;
   padding: 5px;
 
 }
 
 .movie-poster {
-  width: 100%;
-  height: auto;
+  flex-shrink: 1;
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+
 }
 
+.movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
+.pageCnt {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  padding-top: 20px;
+  gap: 2px;
+}
 
 button:disabled {
   background-color: #ccc;
-  
   cursor: not-allowed;
 }
 

@@ -13,6 +13,7 @@ const password = ref('')
 
 // 로그인 함수
 const logIn = async () => {
+  // console.log(username.value, password.value)
   const success = await loginUser(username.value, password.value)
   if (success){
     console.log('로그인 성공')
@@ -48,7 +49,7 @@ const logIn = async () => {
       </form>
 
       <div class="extra-links">
-        <a href="/forgot-password">비밀번호를 잊으셨나요?</a>
+        <!-- <a href="/forgot-password">비밀번호를 잊으셨나요?</a> -->
         <router-link :to="{name:'SignUpView'}">회원가입</router-link>
       </div>
 
