@@ -107,8 +107,8 @@ def calculate_combined_weighted_similarity_bookmark(movies_df, bookmark, field1,
     count_vect = CountVectorizer(min_df=1, ngram_range=(1, 2))
     combined_mat = count_vect.fit_transform(combined_features)
     combined_sim = cosine_similarity(combined_mat, combined_mat)
-    print('북마크')
-    print(combined_sim)
+    # print('북마크')
+    # print(combined_sim)
     return combined_sim
 
 
@@ -196,8 +196,8 @@ def calculate_combined_similarity_rating(movies_df, rating_df, field1, field2, f
     count_vect = CountVectorizer(min_df=1, ngram_range=(1, 2))
     combined_mat = count_vect.fit_transform(combined_features)
     combined_sim = cosine_similarity(combined_mat, combined_mat)
-    print('리뷰')
-    print(combined_sim)
+    # print('리뷰')
+    # print(combined_sim)
     return combined_sim
 
 def find_sim_movie_combined_rating(df, sorted_ind, rating_df, top_n=10):

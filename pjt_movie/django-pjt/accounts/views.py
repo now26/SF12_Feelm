@@ -139,6 +139,8 @@ def mypage(request):
 def mypage_recom(request):
     user = request.user
     if request.method == 'GET':
+        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
+        
         # 리뷰 평점 기반 추천
         user_reviews = user.reviews.values('movie_id', 'rating')
         movie_id = []
@@ -157,7 +159,6 @@ def mypage_recom(request):
         })
         # print(rating_df[['movie_id']])
 
-        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
         if rating_df.empty:
             # rating_rec = movies_df.nlargest(20, 'vote_avg')[['tmdb_id', 'title']]
             rating_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
@@ -193,6 +194,7 @@ def mypage_recom(request):
             
 
         # print(serializer_bookmark.data)
+        
         serializer_bookmark = MovieListSerializer(movies_recom, many=True)
         serializer_rating = MovieListSerializer(rating_recom, many=True)
         return Response({'review_recommendations':serializer_rating.data, 'bookmark_reccomendations': serializer_bookmark.data})

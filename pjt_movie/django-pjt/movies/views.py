@@ -22,7 +22,7 @@ from .serializers import MovieSerializer, MovieListSerializer, ReviewSerializer
 from .models import Movie, Review
 
 from accounts.models import User
-from algo import movie_recommendation_system_combined, movie_recommendation_system_combined_bookmark
+from algo import movie_recommendation_system_combined, load_movie_data
 
 
 def index(request):
@@ -32,11 +32,16 @@ def index(request):
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 # @permission_classes([JWTAuthentication])
-def main(request):
+def genre(request):
     if request.method == 'GET':
-        pass
-    elif request.method == 'POST':
-        pass
+        # 장르 기반 추천
+        movies_df = load_movie_data("C:\Users\SSAFY\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json")
+        genre_filter = movies_df['genre'].str.contains('Animation|Action|Adventure', case=False)
+        genre_rec = movies_df[genre_filter].sample(n=20)[['tmdb_id', 'title']]
+        genre_recom = Movie.objects.filter(tmdb_id__in=genre_rec['tmdb_id'].tolist())
+        
+        serializer_genre = MovieListSerializer(genre_recom, many=True)
+        return Response(serializer_genre.data)
 
 @api_view(['GET'])
 # @permission_classes([AllowAny])
