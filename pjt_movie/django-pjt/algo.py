@@ -126,7 +126,7 @@ def find_sim_movie_combined_bookmark(df, sorted_ind, bookmark, top_n=10):
     title_index = title_movie.index.values
     
     # 유사도 높은 영화 인덱스 추출
-    similar_indexes = sorted_ind[200, :(top_n*2)]
+    similar_indexes = sorted_ind[title_index, :(top_n*2)]
     similar_indexes = similar_indexes.reshape(-1)
     
     # 입력 영화 제외
@@ -190,7 +190,7 @@ def find_sim_movie_combined_rating(df, sorted_ind, rating_df, top_n=10):
     title_index = rating_df['movie_id'].tolist()
     
     # 유사도 높은 영화 인덱스 추출
-    similar_indexes = sorted_ind[200, :(top_n*2)]
+    similar_indexes = sorted_ind[title_index, :(top_n*2)]
     similar_indexes = similar_indexes.reshape(-1)
     
     # 입력 영화 제외
