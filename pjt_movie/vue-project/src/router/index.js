@@ -20,6 +20,9 @@ import movieRouter from '@/router/movie'
 // user.js 라우터를 불러오기.
 import userRouter from '@/router/user'
 
+// content.js 라우터를 불러오기.
+import contentRouter from '@/router/content'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +66,9 @@ const router = createRouter({
 
     // user.js 라우터를 추가
     ...userRouter.options.routes,
+
+    // content.js 라우터를 추가
+    ...contentRouter.options.routes,
   ],
 })
 

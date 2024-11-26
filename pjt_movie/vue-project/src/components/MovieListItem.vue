@@ -9,33 +9,61 @@ const props = defineProps({
 
 
 <template>
+  
   <div>
-
-    <p class="title">{{ movie.title }}</p>
-    
-    <div>
-      <!-- 배경 이미지 표시 -->
-      <img class="img_Backdrop" :src="movie.backdrop_url" alt="img_Backdrop" v-if="movie.backdrop_url">
-    </div>
-
-    <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.tmdb_id }}">상세보기</RouterLink>
-        
-    <hr>
+    <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.tmdb_id }}">
+      <img 
+        class="movie-poster" 
+        :src="movie.poster_url" 
+        alt="img_Poster" 
+        v-if="movie.poster_url"
+      >
+    </RouterLink>
+    <p class="movieInfo">{{ movie.title }}</p>
   </div>
+
 </template>
 
 
 <style scoped>
-.title {
+
+
+
+
+
+/* .movie-card { */
+  /* border: 1px solid #fff; */
+  /* border: 1px none; */
+  /* padding: 5px; */
+/* } */
+
+
+ .movie-poster {
+  flex-shrink: 1;
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+} 
+
+.movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+/* .title {
   font-weight: bold;
   font-size: clamp(0.5rem, 5vw, 1.5rem);
 }
 
 .img_Backdrop {
-
   min-width: 20%;
   max-width: 600px; 
   height: auto; 
-}
+} */
 
 </style>

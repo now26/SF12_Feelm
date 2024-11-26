@@ -69,9 +69,10 @@ class MovieListSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Movie
+    # fields = '__all__'
     fields = (
       'tmdb_id', 'title', 'vote_avg', 'vote_count', 'status', 'release_date', 'runtime', 'poster_url', 'backdrop_url',
-      'review_set', 'review_count',
+      'review_set', 'review_count', 'genre',
     )
     
 

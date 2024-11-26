@@ -21,30 +21,103 @@ export const useMovieStore = defineStore('movies', () => {
   // console.log(import.meta.env.VITE_TMDB_TOKEN)
 
 
+  // TMDB 장르 목록을 가져오는 함수
+  
+  const genres = ref([]);
+  
+  const getGenres = async function() {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${TMDB_BASE_URL}/3/genre/movie/list`,
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${TMDB_TOKEN}`,
+        },
+        params: {
+          language: 'en-US',
+        }
+      });
+      genres.value = response.data.genres; // 장르 목록 저장
+    } catch (err) {
+      console.error('Error fetching genres:', err);
+    }
+  };
+  
+  
+  const selectedGenre = ref(null); // 선택된 장르
 
+  // 장르 필터 적용 함수
+  const applyGenreFilter = function() {
+    if (!selectedGenre.value) {
+      // 장르가 선택되지 않으면 전체 영화 목록을 반환
+
+      return movies_db.value;
+    }
+  
+    // // 장르 필터링: 선택된 장르와 일치하는 genre가 있는 영화만 필터링
+    const filteredMovies = movies_db.value.filter(movie => {
+      return movie.genre && movie.genre.includes(selectedGenre.value);
+    });
+  
+    movies_db.value = filteredMovies; // 필터링된 영화 목록으로 업데이트
+  };
+  
+  // 선택된 장르 변경 시 필터링 재적용
+  const setSelectedGenre = function(genreId) {
+    selectedGenre.value = genreId; // 장르 선택
+    applyGenreFilter(); // 장르 변경 시 필터 재적용
+  };
+  
+
+  // 영화 데이터 ===================================
+  
   const movies_db = ref([])
+  const db_currentPage = ref(1) // 현재 페이지 번호
+  const db_totalPages = ref(0) // 전체 페이지 수
+  const moviesPerPage = 20 // 한 페이지당 영화 개수
 
-  const getMovies = function() {
+  const getMovies = async function() {
     // 토큰 전달 test
     // console.log("토큰: ", token)
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${DB_BASE_URL}/api/v1/movies/`,
+        headers: {
+          // 토큰 전달
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // 영화 목록을 받아와서 movies_db에 저장
+      movies_db.value = response.data;
+      db_totalPages.value = Math.ceil(movies_db.value.length / moviesPerPage); // 총 페이지 수 계산
+  
+      // 장르 필터 적용 후 영화 목록 업데이트
+      applyGenreFilter();
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    axios({
-      method: 'get',
-      url: `${DB_BASE_URL}/api/v1/movies/`,
-      headers: {
-        // 토큰 전달
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      movies_db.value = res.data
-      // console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }
+  // 현재 페이지에 맞는 20개 영화만 필터링하는 함수
+  const getMoviesForCurrentPage = function() {
+    const start = (db_currentPage.value - 1) * moviesPerPage;
+    const end = start + moviesPerPage;
+    return movies_db.value.slice(start, end);
+  };
 
+  // 페이지 변경 함수
+  const db_changePage = (pageNum) => {
+    if (pageNum < 1 || pageNum > db_totalPages.value) return; // 유효하지 않은 페이지 번호는 무시
+    db_currentPage.value = pageNum; // 새로운 페이지 번호로 설정
+    getMoviesForCurrentPage(); // 새로운 페이지에 맞는 영화 목록 가져오기
+  };
+    
+  
+  
   // TMDB - movie_popular
   const movie_popular = ref([]) // 인기 영화 목록
   const po_currentPage = ref(1) // 현재 페이지 번호
@@ -235,6 +308,12 @@ export const useMovieStore = defineStore('movies', () => {
   return {
     DB_BASE_URL,
     movies_db,
+    db_currentPage,
+    db_totalPages,
+    moviesPerPage,
+
+    genres,
+    selectedGenre,
 
     movie_popular,
     po_currentPage,
@@ -253,6 +332,10 @@ export const useMovieStore = defineStore('movies', () => {
     tr_totalPages,
 
     getMovies,
+    getGenres,
+    db_changePage,
+    getMoviesForCurrentPage,
+    setSelectedGenre,
     getMoviePopular,
     getMovieNowPlaying,
     getMovieUpComing,

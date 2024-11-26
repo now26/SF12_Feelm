@@ -9,6 +9,8 @@ import { useRouter } from 'vue-router';
 import AppNavbar from '@/components/Common/AppNavbar.vue'
 import CartNavbar from '@/components/Common/CartNavbar.vue'
 
+import { useUserStore } from './stores/users';
+const userStore = useUserStore()
 
 
 // 로그인 상태를 반응형으로 관리

@@ -8,7 +8,9 @@ const useStore = useCounterStore()
 
 <template>
   <div>
-    <h3>Article List</h3>
+    <header>
+      <p>Article List</p>
+    </header>
 
     <ArticleListItem
       v-for="test in useStore.tests"
@@ -20,5 +22,11 @@ const useStore = useCounterStore()
 
 
 <style scoped>
+p {
+  font-size: 1.5rem;
+  color:rgb(16, 16, 77);
+  font-weight: bolder;
+  padding-bottom: 30px;
+}
 
 </style>

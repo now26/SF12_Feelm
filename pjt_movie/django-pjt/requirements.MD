@@ -55,7 +55,6 @@
 - `imageio==2.36.0`
 - `pillow==10.4.0`
 - `pywin32==306`
-- `scikit-learn==1.5.2`
 
 ## 9. CORS 관련 패키지들
 - `django-cors-headers==4.6.0`

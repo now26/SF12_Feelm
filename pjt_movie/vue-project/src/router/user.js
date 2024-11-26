@@ -8,6 +8,12 @@ import UserInfo from '@/components/User/UserInfo.vue'
 import ReviewView from '@/views/User/ReviewView.vue'
 import ReviewDetailView from '@/views/User/ReviewDetailView.vue'
 import ReviewList from '@/components/User/ReviewList.vue'
+import ReviewCreateView from '@/views/User/ReviewCreateView.vue'
+
+import DiaryCreateView from '@/views/User/DiaryCreateView.vue'
+import DiaryDetailView from '@/views/User/DiaryDetailView.vue'
+
+import BookmarkView from '@/views/User/BookmarkView.vue'
 
 import TabsView from '@/views/TabsView.vue'
 
@@ -40,6 +46,26 @@ const userRouter = createRouter({
       name: 'ReviewDetailView',
       component: ReviewDetailView
     },
+    {
+      path: '/review/create',
+      name: 'ReviewCreateView',
+      component: ReviewCreateView
+    },
+    {
+      path: '/mypage/diary',
+      name: 'DiaryCreateView',
+      component: DiaryCreateView
+    },
+    {
+      path: '/mypage/diary',
+      name: 'DiaryDetailView',
+      component: DiaryDetailView
+    },
+    {
+      path: '/movies/bookmark',
+      name: 'BookmarkView',
+      component: BookmarkView
+    }
 
   ],
 })

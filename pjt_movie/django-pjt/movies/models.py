@@ -40,6 +40,7 @@ class Movie(models.Model):
 
 
 
+
 # 리뷰 모델
 class Review(models.Model):
     user = models.ForeignKey('accounts.User', related_name='reviews', on_delete=models.CASCADE)
@@ -59,3 +60,4 @@ class Review(models.Model):
         ],
         default=0.0
     )
+
