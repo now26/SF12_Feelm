@@ -14,7 +14,7 @@ import ReviewCreateView from '@/views/User/ReviewCreateView.vue'
 import DiaryView from '@/views/User/DiaryView.vue'
 import DiaryCreateView from '@/views/User/DiaryCreateView.vue'
 import DiaryDetailView from '@/views/User/DiaryDetailView.vue'
-
+import DiaryUpdateView from '@/views/User/DiaryUpdateView.vue'
 
 import BookmarkDetailView from '@/views/User/BookmarkDetailView.vue'
 
@@ -70,9 +70,14 @@ const userRouter = createRouter({
       component: DiaryCreateView
     },
     {
-      path: '/mypage/diary/:diary_id',
+      path: '/mypage/diary/detail/:diary_id',
       name: 'DiaryDetailView',
       component: DiaryDetailView
+    },
+    {
+      path: '/mypage/diary/update/:diary_id',
+      name: 'DiaryUpdateView',
+      component: DiaryUpdateView
     },
     {
       path: '/movies/bookmark',

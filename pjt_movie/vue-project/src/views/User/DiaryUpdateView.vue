@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { onMounted } from 'vue';
 import axios from 'axios'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -13,51 +14,69 @@ const router = useRouter()
 
 // Review를 작성할 영화 DB 받아오기
 const route = useRoute()
-const movieDB = JSON.parse(route.query.movie_db || '{}')
+// const movieDB = JSON.parse(route.query.movie_db || '{}')
 
 // content는 문자열로, rating은 숫자나 문자열로 초기화
 const title = ref('')
 const content = ref('')
-
 const diary_id = ref(0)
-
-const tmdb_id = movieDB.tmdb_id
 
 // console.log(typeof movieDB.tmdb_id)
 
+// 다이어리 데이터를 받아오는 함수
+const fetchDiaryData = () => {
+  axios({
+    method: 'get',
+    url: `${useStore.API_URL}/accounts/mypage/diary/${route.params.diary_id}/`,
+    headers: {
+      Authorization: `Bearer ${useStore.token}`,
+    }
+  })
+  .then((res) => {
+    const diary = res.data
+    title.value = diary.title
+    content.value = diary.content
+    diary_id.value = diary.id
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
 
-const createDiary = () => {
-    
-  // 평점과 내용이 모두 입력되었는지 확인
-  if (!title.value || !content.value) {
-    alert('제목과 내용을 모두 입력해주세요');
-    return;
-  }
+const updateDiary = () => {
+  console.log('일기수정 버튼') // 디버깅
 
   axios({
-      method: 'post',
-      url: `${userStore.DB_BASE_URL}/accounts/mypage/diary/`,
-      data: {
-          tmdb_id: tmdb_id,
-          title: title.value,
-          content: content.value,
-      },
-      headers: {
-          Authorization: `Bearer ${useStore.token}`
-      }
+    method: 'put',
+    url: `${useStore.API_URL}/accounts/mypage/diary/${route.params.diary_id}/`,
+    data: {
+        title: title.value,
+        content: content.value,
+    },
+    headers: {
+      Authorization: `Bearer ${useStore.token}`,
+    }
   })
   .then((res) => {
     if (res.data && res.data.id) {
       diary_id.value = res.data.id; // 생성된 다이어리 ID 설정
+
+      title.value = res.data.title
+      content.value = res.data.content
+
       router.push({ name: 'DiaryDetailView', params: { diary_id: diary_id.value } }) // 다이어리 상세 페이지로 이동
     }
   })
   .catch((err) => {
-    // 에러 발생 시 사용자에게 알림
-    console.error('다이어리 생성 오류:', err)
-    alert('다이어리 생성에 실패했습니다. 다시 시도해주세요.')
+    console.log(err)
   })
 }
+
+// 페이지가 마운트되면 기존 다이어리 데이터를 로드
+onMounted(() => {
+  fetchDiaryData()
+})
+
 </script>
 
 
@@ -65,10 +84,10 @@ const createDiary = () => {
 <template>
   
   <div id="page">
-    <h1>DiaryCreateView</h1>
+    <h1>Diary Update View</h1>
     
       <div>
-        <form @submit.prevent="createDiary">
+        <form @submit.prevent="updateDiary">
           <div>
             <label for="title">Title</label>
             <input type="text"
@@ -89,14 +108,6 @@ const createDiary = () => {
 
           <button type="submit">submit</button>
         </form>
-
-
-    <br><hr><br>
-
-    Movie DB : 
-    <pre>
-        {{ movieDB }}
-    </pre>
     </div>
 
   </div>

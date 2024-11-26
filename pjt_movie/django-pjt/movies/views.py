@@ -35,7 +35,7 @@ def index(request):
 def genre(request):
     if request.method == 'GET':
         # 장르 기반 추천
-        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movie101.json")
+        movies_df = load_movie_data(r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop.json")
         genre_rec = genre_recom_random(movies_df)
         genre_recom = Movie.objects.filter(tmdb_id__in=genre_rec['tmdb_id'].tolist())
         
@@ -63,7 +63,8 @@ def movie_detail(request, tmdb_id):
         print(movie.title)
         # 특정 영화 정보와 관련된 추천
         recommendations = movie_recommendation_system_combined(
-            "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
+            # r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json", 
+            r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop.json", 
             movie.title, 
             'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
             5, 1, 2, 3, 5, 4, 

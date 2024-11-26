@@ -1,22 +1,15 @@
 <script setup>
 import { defineEmits } from 'vue';
-import { RouterLink } from 'vue-router';
+const emit = defineEmits(['deleteReview'])
 import axios from 'axios'
 import { useCounterStore } from '@/stores/counter';
-
-const emit = defineEmits()
 const useStore = useCounterStore()
 
 defineProps({
-  review:Object
+    review:Object,
+    movie_id:Number
 })
 
-const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
-const getPosterUrl = (posterPath, imageSize) => {
-  if (posterPath) {
-    return `${BASE_IMAGE_URL}${imageSize}${posterPath}`
-  }
-}
 
 const deleteReview = (tmdb_id, review_id) => {
   console.log('리뷰삭제 버튼') // 디버깅
@@ -41,23 +34,38 @@ const deleteReview = (tmdb_id, review_id) => {
 </script>
 
 
+
 <template>
   <div>
+    <!-- {{ review }} -->
+    <!-- {{ movie_id }} -->
     <ul>
-      <!-- {{ review }} -->
-      <RouterLink :to="{ name: 'MovieDetailView', params:{ id: review.movie.tmdb_id }}">
-        <img :src="getPosterUrl(review.movie.poster_path, 'w300')" alt="poster_img">
-      </RouterLink>
-      <p>Movie : {{ review.movie.title }}</p>
-      <p>Contents : {{ review.content }}</p>
-      <p>Ratings : {{ review.rating }}</p>
-      <button @click.prevent="deleteReview(review.movie.tmdb_id, review.id)">리뷰 삭제</button>
+      <li class="li-contain">
+        <div class="list">
+          <p>User: {{ review.user }}</p>
+          <p>Content: {{ review.content }}</p>
+          <p>Rating: {{ review.rating }}</p>
+          <button @click.prevent="deleteReview(movie_id, review.id)">리뷰 삭제</button>
+        </div>
+      </li>
     </ul>
-    <hr>
+
+
   </div>
 </template>
 
 
+
 <style scoped>
+.li-contain{
+  display: flex;
+  /* justify-content: center; */
+}
+.list {
+  display: flex;
+  float:left;
+  gap:50px;
+  justify-content: center;
+}
 
 </style>

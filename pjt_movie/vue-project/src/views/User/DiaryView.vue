@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import MyDiaryList from '@/components/User/MyDiaryList.vue';
 
 import { useContentStore } from '@/stores/contents';
 const contentStore = useContentStore()
@@ -22,7 +23,7 @@ console.log(diaryList.value)
 <template>
   <div>
     <h1>Diary View</h1>
-    {{  }}
+    <MyDiaryList></MyDiaryList>
   </div>
 </template>
 

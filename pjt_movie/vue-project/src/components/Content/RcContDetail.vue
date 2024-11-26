@@ -4,14 +4,18 @@ import { onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import { RouterLink } from 'vue-router';
 import { useMovieStore } from '@/stores/movies';
-import MoviePopularDetailView from '@/views/Movie_tmdb/MoviePopularDetailView.vue';
+import { useContentStore } from '@/stores/contents';
+
+import RcContentDetailView from '@/views/MyContent/RcContentDetailView.vue';
+import { useUserStore } from '@/stores/users';
 
 // Pinia store에서 상태와 함수를 가져오기.
-const movieStore = useMovieStore()
+// const movieStore = useMovieStore()
+const contentStore = useContentStore()
 
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
 onMounted(() => {
-  movieStore.getMoviePopular(movieStore.po_currentPage)
+    contentStore.getContentBased(278)
 })
 
 const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
@@ -33,30 +37,29 @@ const getBackDrop = (backDropPath, imageSize) => {
 //   }
 }
 
-const movies = computed(() => movieStore.movie_popular)
-const currentPage = computed(() => movieStore.po_currentPage)
-const totalPages = computed(() => movieStore.po_totalPages)
+const rc_cont_movies = computed(() => contentStore.rcContentBasedMovies)
+// const currentPage = computed(() => contentStore.rcCt_urrentPage)
+// const totalPages = computed(() => contentStore.rcCt_totalPages)
 // console.log(movies)
 
 </script>
 
 
 <template>
-  <div>
+  <div id="page">
     <header>
-      <p>Popular Movies</p>
+      <p>Content Based</p>
     </header>
 
-    
     <div class="tmdb-container">      
       <div>
-        <RouterLink :to="{ name:'MoviePopularDetailView' }" class="detail"> Detail </RouterLink>
+        <RouterLink :to="{ name:'RcContentDetailView' }" class="detail"> Detail </RouterLink>
       </div>
       <div class="content">
-        <div v-if="movies">
+        <div v-if="rc_cont_movies.length !== null">
           <div class="movie-list">
             <div 
-              v-for="movie in movies"
+              v-for="movie in rc_cont_movies"
               :key="movie.id"
               class="movie-card"
             >

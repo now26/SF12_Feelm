@@ -216,14 +216,73 @@ class UserSerializer(serializers.ModelSerializer):
         
 # 일기 
 class DiaryListSerializer(serializers.ModelSerializer):
-    # movie = MovieSerializer(read_only=True, source='movie.all')
+    
+    # MovieSerializer 정의
+    class MovieSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Movie
+            fields = (
+                'title',
+                'tmdb_id',
+                'poster_path',
+            )
+    
+    # movie 필드는 읽기 전용
+    movie = MovieSerializer(read_only=True)
+    
     class Meta:
         model = Diary
-        fields = '__all__'
-        read_only_fields = ('user',)
+        fields = (
+            'id',  # Diary의 id
+            'movie',  # 연결된 Movie 정보
+            'title',  # Diary의 제목
+            'content',  # Diary 내용
+            'user',  # Diary 작성자
+            'created_at',  # 생성 일자
+            'updated_at',  # 수정 일자
+        )
+        read_only_fields = ('user', 'movie')  # 'user'와 'movie' 필드는 읽기 전용으로 설정
+
 
 class DiarySerializer(serializers.ModelSerializer):
+    
+    # MovieSerializer 정의
+    class MovieSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Movie
+            fields = (
+                'title',
+                'tmdb_id',
+                'poster_path',
+            )
+    
+    # movie 필드는 읽기 전용
+    movie = MovieSerializer(read_only=True)
+    
     class Meta:
         model = Diary
-        fields = '__all__'
-        read_only_fields = ('user', 'movie',)
+        fields = (
+            'id',  # Diary의 id
+            'movie',  # 연결된 Movie 정보
+            'title',  # Diary의 제목
+            'content',  # Diary 내용
+            'user',  # Diary 작성자
+            'created_at',  # 생성 일자
+            'updated_at',  # 수정 일자
+        )
+        read_only_fields = ('user', 'movie')  # 'user'와 'movie' 필드는 읽기 전용으로 설정
+
+
+# # 일기 
+# class DiaryListSerializer(serializers.ModelSerializer):
+#     # movie = MovieSerializer(read_only=True, source='movie.all')
+#     class Meta:
+#         model = Diary
+#         fields = '__all__'
+#         read_only_fields = ('user',)
+
+# class DiarySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Diary
+#         fields = '__all__'
+#         read_only_fields = ('user', 'movie',)

@@ -139,7 +139,7 @@ def mypage(request):
 def mypage_recom(request):
     user = request.user
     if request.method == 'GET':
-        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
+        movies_df = load_movie_data(r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json")
         
         # 리뷰 평점 기반 추천
         user_reviews = user.reviews.values('movie_id', 'rating')
@@ -165,7 +165,7 @@ def mypage_recom(request):
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec['tmdb_id'].tolist())
         else:
             rating_rec = movie_recommendation_system_combined_rating(
-                "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json",
+                r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json",
                 rating_df,
                 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
                 4, 4, 1, 1, 3, 2.5, 
@@ -184,7 +184,7 @@ def mypage_recom(request):
             movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec['tmdb_id'].tolist())
         else:
             movies_rec = movie_recommendation_system_combined_bookmark(
-                "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
+                r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json", 
                 bookmark, 
                 'title', 'overview', 'production_com', 'original_lang', 'genre', 'keyword', 
                 5, 2, 1, 3, 4, 4, 

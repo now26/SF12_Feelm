@@ -34,6 +34,11 @@ export const useUserStore = defineStore('user', () => {
         }
       })
       userInfo.value = response.data
+
+      // console.log(response.data)
+      // console.log(userInfo.value)
+      // localStorage.setItem('user', JSON.stringify(userInfo.value))  // 'user' 항목에 사용자 정보 저장
+
     } catch (err) {
       console.error('Error fetching user info:', err)
       error.value = 'Failed to fetch user information.' // 에러 메시지 설정
@@ -61,6 +66,7 @@ export const useUserStore = defineStore('user', () => {
       })
 
       console.log('유저정보 업데이트 성공:', response.data);
+      alert('회원정보 변경 성공')
       router.push({name : 'MyPageView'})
     } catch (error) {
       // 에러가 axios response 객체를 포함하고 있는지 확인
@@ -75,6 +81,9 @@ export const useUserStore = defineStore('user', () => {
       // 에러를 상위로 전달
       throw error;
     }
+
+
+
   }
 
   return {
@@ -83,6 +92,7 @@ export const useUserStore = defineStore('user', () => {
     isLoading,
     error,
     errorMessage,
+
     getUserInfo,
     updateUserInfo,
   }

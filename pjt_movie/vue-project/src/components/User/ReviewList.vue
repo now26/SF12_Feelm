@@ -14,6 +14,7 @@ const reviews = ref([...userDB.reviews])
 const handleDeleteReview = (review_id) => {
   // 삭제된 review_id를 제외한 새로운 배열로 갱신
   reviews.value = reviews.value.filter(review => review.id !== review_id);
+  userDB.reviews = reviews.value;
 }
 
 // defineProps({
@@ -25,7 +26,7 @@ const handleDeleteReview = (review_id) => {
 
 <template>
 
-  <div v-if="reviews">
+  <div v-if="reviews && reviews.length > 0">
     <ReviewListItem 
       v-for="review in reviews"
       :key="review.user"

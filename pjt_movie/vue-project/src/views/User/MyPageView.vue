@@ -17,12 +17,7 @@ onBeforeRouteLeave((to, from, next) => {
 const userStore = useUserStore()
 
 onMounted(() => {
-  if (localStorage.user) {
-    userStore.getUserInfo();
-  }
-  // if (userStore.token) {
-  //   userStore.getUserInfo();
-  // }
+  userStore.getUserInfo();
 })
 
 </script>
