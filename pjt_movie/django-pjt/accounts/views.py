@@ -20,7 +20,7 @@ from movies.models import Movie, Review
 
 import pandas as pd
 from movies.serializers import MovieListSerializer
-from algo import movie_recommendation_system_combined, movie_recommendation_system_combined_bookmark
+from algo import movie_recommendation_system_combined_rating, movie_recommendation_system_combined_bookmark, load_movie_data
 
 # 회원가입
 class SignupAPIView(APIView):
@@ -139,25 +139,64 @@ def mypage(request):
 def mypage_recom(request):
     user = request.user
     if request.method == 'GET':
+        # 리뷰 평점 기반 추천
+        user_reviews = user.reviews.values('movie_id', 'rating')
+        movie_id = []
+        tmdb_id = []
+        rating = []
+        for review in user_reviews:
+            movie_id.append(review['movie_id']-1)
+            rating.append(review['rating'])
+            tmdb = Movie.objects.get(id=review['movie_id'])
+            tmdb_id.append(tmdb)
+        # print(movie_id)
+        rating_df = pd.DataFrame({
+            'movie_id':movie_id,
+            'tmdb_id':tmdb_id,
+            'rating':rating,
+        })
+        # print(rating_df[['movie_id']])
+
+        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json")
+        if rating_df.empty:
+            # rating_rec = movies_df.nlargest(20, 'vote_avg')[['tmdb_id', 'title']]
+            rating_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
+            rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec['tmdb_id'].tolist())
+        else:
+            rating_rec = movie_recommendation_system_combined_rating(
+                "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json",
+                rating_df,
+                'title', 'overview', 'original_lang', 'genre', 'keyword', 
+                2, 2, 1, 2, 1.5, 
+                20
+            )
+            rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
+        # print(rating_recom)
         # 북마크 기반 추천
         bookmark_list = list(request.user.bookmark.all().values())
         # print(bookmark_list)
         # DataFrame 생성
         bookmark = pd.DataFrame(bookmark_list)
-        print(bookmark)
-        movies_rec = movie_recommendation_system_combined_bookmark(
-            "C:/Users/SSAFY/Desktop/새 폴더 (4)/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop.json", 
-            bookmark, 
-            'title', 'production_com', 'original_lang', 'genre', 'keyword', 
-            5, 1, 5, 3, 2, 
-            20
-        )
-        # print(movies_rec)
-        movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
-        # print(movies_recom)
-        serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+
+        if bookmark.empty:
+            movies_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
+            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec['tmdb_id'].tolist())
+        else:
+            movies_rec = movie_recommendation_system_combined_bookmark(
+                "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
+                bookmark, 
+                'title', 'production_com', 'original_lang', 'genre', 'keyword', 
+                5, 1, 5, 3, 2, 
+                20
+            )
+            movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
+            
+
         # print(serializer_bookmark.data)
-        return Response(serializer_bookmark.data)
+        serializer_bookmark = MovieListSerializer(movies_recom, many=True)
+        serializer_rating = MovieListSerializer(rating_recom, many=True)
+        return Response({'review_recommendations':serializer_rating.data, 'bookmark_reccomendations': serializer_bookmark.data})
+        # return Response(serializer_bookmark.data)
         
 
 # 일기 목록, 작성
