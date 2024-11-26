@@ -4,16 +4,19 @@ import { useCounterStore } from '@/stores/counter'
 import MyPageView from '@/views/User/MyPageView.vue'
 import UserInfoView from '@/views/User/UserInfoView.vue'
 import UserInfo from '@/components/User/UserInfo.vue'
+import UpdateUserInfoView from '@/views/User/UpdateUserInfoView.vue'
 
 import ReviewView from '@/views/User/ReviewView.vue'
 import ReviewDetailView from '@/views/User/ReviewDetailView.vue'
 import ReviewList from '@/components/User/ReviewList.vue'
 import ReviewCreateView from '@/views/User/ReviewCreateView.vue'
 
+import DiaryView from '@/views/User/DiaryView.vue'
 import DiaryCreateView from '@/views/User/DiaryCreateView.vue'
 import DiaryDetailView from '@/views/User/DiaryDetailView.vue'
+import DiaryUpdateView from '@/views/User/DiaryUpdateView.vue'
 
-import BookmarkView from '@/views/User/BookmarkView.vue'
+import BookmarkDetailView from '@/views/User/BookmarkDetailView.vue'
 
 import TabsView from '@/views/TabsView.vue'
 
@@ -32,15 +35,20 @@ const userRouter = createRouter({
       component: UserInfo
     },
     {
-      path: '/review',
-      name: 'ReviewList',
-      component: ReviewList
+      path: '/mypage/myinfo/update',
+      name: 'UpdateUserInfoView',
+      component: UpdateUserInfoView
     },
     // {
     //   path: '/review',
     //   name: 'ReviewView',
     //   component: ReviewView
     // },
+    {
+      path: '/review',
+      name: 'ReviewList',
+      component: ReviewList
+    },
     {
       path: '/review/:id',
       name: 'ReviewDetailView',
@@ -53,19 +61,29 @@ const userRouter = createRouter({
     },
     {
       path: '/mypage/diary',
+      name: 'DiaryView',
+      component: DiaryView
+    },
+    {
+      path: '/mypage/diary/create',
       name: 'DiaryCreateView',
       component: DiaryCreateView
     },
     {
-      path: '/mypage/diary',
+      path: '/mypage/diary/detail/:diary_id',
       name: 'DiaryDetailView',
       component: DiaryDetailView
     },
     {
+      path: '/mypage/diary/update/:diary_id',
+      name: 'DiaryUpdateView',
+      component: DiaryUpdateView
+    },
+    {
       path: '/movies/bookmark',
-      name: 'BookmarkView',
-      component: BookmarkView
-    }
+      name: 'BookmarkDetailView',
+      component: BookmarkDetailView
+    },
 
   ],
 })

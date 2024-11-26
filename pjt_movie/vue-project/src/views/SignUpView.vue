@@ -229,7 +229,7 @@ const signUp = async function() {
         
         <div class="input-group">
           <label for="age">Age<b class="required">*</b> : </label>
-          <input type="number" id="age" v-model.trim="age" min="1" placeholder="20" class="inputform" required>
+          <input type="number" id="age" v-model.trim="age" min="1" placeholder="00" class="inputform" required>
         </div>
   
         <div class="input-group">
@@ -331,7 +331,7 @@ label {
   width: 92%;
   padding: 8px;
   font-size: 1rem;
-  border: 1px solid #333;
+  border: 1px solid #cacaca;
   border-radius: 5px; 
 }
 

@@ -5,8 +5,11 @@ import { RouterLink } from 'vue-router'
 
 import { useCounterStore } from '@/stores/counter';
 import { useMovieStore } from '@/stores/movies';
+import { useUserStore } from '@/stores/users';
+const userStore = useUserStore()
 
 import MoviePopular from '@/components/Movie_tmdb/MoviePopular.vue'
+import RcUserDetail from '@/components/Content/RcUserDetail.vue';
 
 const movieStore = useMovieStore()
 
@@ -15,6 +18,11 @@ const randomMovies = ref([])
 const movie_backdrop_image = ref([])
 
 onMounted(() => {
+  // if (!localStorage.getItem('user')) {
+  //   userStore.getUserInfo();
+  // }
+  userStore.getUserInfo()
+
   movieStore.getMovies()
 
   // movieStore.movies_db 에서 상위 40개 영화 자르기
@@ -100,6 +108,9 @@ function moveSlide(direction){
     </div>
 
     <MoviePopular/>
+
+    <RcUserDetail/> 
+    
 
   </div>
 </template>

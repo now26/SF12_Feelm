@@ -53,7 +53,7 @@ const totalPages = computed(() => movieStore.po_totalPages)
         <RouterLink :to="{ name:'MoviePopularDetailView' }" class="detail"> Detail </RouterLink>
       </div>
       <div class="content">
-        <div v-if="movies.length !== null">
+        <div v-if="movies">
           <div class="movie-list">
             <div 
               v-for="movie in movies"

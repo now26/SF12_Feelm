@@ -17,6 +17,8 @@ const logIn = async () => {
   const success = await loginUser(username.value, password.value)
   if (success){
     console.log('로그인 성공')
+    alert('로그인 성공')
+    
     useStore.token = localStorage.getItem('access_token')
     router.push({ name: 'HomeView' })
   } else{
@@ -115,7 +117,7 @@ label {
   width: 92%;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #333;
+  border: 1px solid #cacaca;
   border-radius: 5px; 
 }
 
