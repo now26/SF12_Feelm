@@ -22,7 +22,7 @@ from .serializers import MovieSerializer, MovieListSerializer, ReviewSerializer
 from .models import Movie, Review
 
 from accounts.models import User
-from algo import movie_recommendation_system_combined, movie_recommendation_system_combined_bookmark
+from algo import movie_recommendation_system_combined, load_movie_data, genre_recom_random
 
 
 def index(request):
@@ -32,11 +32,15 @@ def index(request):
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 # @permission_classes([JWTAuthentication])
-def main(request):
+def genre(request):
     if request.method == 'GET':
-        pass
-    elif request.method == 'POST':
-        pass
+        # 장르 기반 추천
+        movies_df = load_movie_data("C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movie101.json")
+        genre_rec = genre_recom_random(movies_df)
+        genre_recom = Movie.objects.filter(tmdb_id__in=genre_rec['tmdb_id'].tolist())
+        
+        serializer_genre = MovieListSerializer(genre_recom, many=True)
+        return Response(serializer_genre.data)
 
 @api_view(['GET'])
 # @permission_classes([AllowAny])
@@ -51,19 +55,24 @@ def movie_list(request):
 @api_view(['GET', 'POST'])
 def movie_detail(request, tmdb_id):
     user = request.user
-    movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    # movie = get_object_or_404(Movie, tmdb_id=tmdb_id)
+    movie = Movie.objects.get(tmdb_id=tmdb_id)
     # review = Review.objects.filter(movie=movie.pk)
     if request.method == 'GET':
         serializer = MovieSerializer(movie)
-        
+        print(movie.title)
         # 특정 영화 정보와 관련된 추천
         recommendations = movie_recommendation_system_combined(
-            r"C:\Users\SSAFY\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json", 
+            "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json", 
             movie.title, 
             'title', 'production_com', 'original_lang', 'genre', 'keyword', 
             5, 1, 5, 3, 2, 
             20
         )
+        print(recommendations)
+        # if recommendations=="영화를 찾을 수 없습니다.":
+        #     movies = None
+        # else:
         movies = Movie.objects.filter(tmdb_id__in=recommendations)
         serializer_rec = MovieListSerializer(movies, many=True)
         # print(serializer_rec.data)
