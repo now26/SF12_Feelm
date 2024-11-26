@@ -70,29 +70,6 @@ const getBackDrop = (backDropPath, imageSize) => {
       <div v-if="isLoading">
         <p>Loading...</p>
       </div>
-      
-      <!-- <h1>RcUserBookMark</h1> -->
-      <header>
-        북마크 기반의 영화 추천
-      </header>
-      <div class="content">
-        <!-- 북마크 추천 영화 목록 -->
-        <div v-if="!isLoading && rc_bookmark_movies.length > 0">
-          <div class="movie-list">
-            <RcUserBM 
-                v-for="movie in rc_bookmark_movies"
-                :key="movie.tmdb_id"
-                :movie="movie"
-                class="movie-card"
-            />
-          </div>
-        </div>
-        
-        <!-- 북마크 추천 영화가 없을 경우 -->
-        <div v-else-if="!isLoading && rc_bookmark_movies.length === 0">
-          <p>No Bookmark Movies</p>
-        </div>
-      </div>
 
         <header2>
           리뷰 기반의 영화 추천

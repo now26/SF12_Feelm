@@ -8,7 +8,7 @@ import RcUserBased from '@/components/Content/RcUserBased.vue';
 
 // `tabs`는 탭 목록을 배열로 정의
 // const tabs = ['BookMarks', 'MyContents', 'Rc_ContentBased', 'Rc_UserBased']
-const tabs = ['BookMarks', 'Rc_ContentBased', 'Rc_UserBased']
+const tabs = ['BookMarks', 'BookMarkBased', 'ReviewBased']
 
 // 로컬스토리지에서 저장된 탭 상태를 가져오기. 없으면 기본값 'MyInfo'
 const savedTab = localStorage.getItem('currentTab')
@@ -27,8 +27,8 @@ const setCurrentTab = (tab) => {
 const currentTabComponent = computed(() => {
     if (currentTab.value === 'BookMarks') return MyBookMarksList
     if (currentTab.value === 'MyContents') return MyContents
-    if (currentTab.value === 'Rc_ContentBased') return RcContentBased
-    if (currentTab.value === 'Rc_UserBased') return RcUserBased
+    if (currentTab.value === 'BookMarkBased') return RcContentBased
+    if (currentTab.value === 'ReviewBased') return RcUserBased
 })
 
 

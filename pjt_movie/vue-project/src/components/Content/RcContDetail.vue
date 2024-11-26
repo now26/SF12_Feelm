@@ -1,21 +1,43 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
-import { RouterLink } from 'vue-router';
-import { useMovieStore } from '@/stores/movies';
-import { useContentStore } from '@/stores/contents';
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
+import { useContentStore } from '@/stores/contents'
+import { useCounterStore } from '@/stores/counter';
+import RcUserBM from './RcUserBM.vue';
+import RcUserRT from './RcUserRT.vue';
 
-import RcContentDetailView from '@/views/MyContent/RcContentDetailView.vue';
-import { useUserStore } from '@/stores/users';
+const useStore = useCounterStore()
 
 // Pinia store에서 상태와 함수를 가져오기.
-// const movieStore = useMovieStore()
 const contentStore = useContentStore()
+const DB_BASE_URL = 'http://127.0.0.1:8000'
+
+// 데이터를 저장할 배열 선언
+const rc_bookmark_movies = ref([])
+const rc_review_movies = ref([])
 
 // 컴포넌트가 마운트될 때 영화 목록을 불러오기.
-onMounted(() => {
-    contentStore.getContentBased(278)
+onMounted(async () => {
+  try {
+    // API 요청을 보내고, 응답 받은 데이터 바로 배열에 할당
+    const response = await axios({
+      method: 'get',
+      url: `${DB_BASE_URL}/accounts/mypage/recom/`,
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${useStore.token}`,
+      },
+    });
+
+    console.log("API response:", response.data);  // 응답을 확인
+
+    // 응답 받은 데이터를 배열에 바로 할당
+    rc_bookmark_movies.value = response.data?.bookmark_reccomendations || []
+    rc_review_movies.value = response.data?.review_recommendations || []
+
+  } catch (err) {
+    console.error('Error fetching recommendations:', err)
+  }
 })
 
 const BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/'
@@ -23,24 +45,13 @@ const getPosterUrl = (posterPath, imageSize) => {
   if (posterPath) {
     return `${BASE_IMAGE_URL}${imageSize}${posterPath}`
   }
-//   else {
-//     return `${BASE_IMAGE_URL}/default-image.jpg`; // 기본 이미지 경로
-//   }
 }
 
 const getBackDrop = (backDropPath, imageSize) => {
   if (backDropPath) {
     return `${BASE_IMAGE_URL}${imageSize}${backDropPath}`
   }
-//   else {
-//     return `${BASE_IMAGE_URL}/default-image.jpg`; // 기본 이미지 경로
-//   }
 }
-
-const rc_cont_movies = computed(() => contentStore.rcContentBasedMovies)
-// const currentPage = computed(() => contentStore.rcCt_urrentPage)
-// const totalPages = computed(() => contentStore.rcCt_totalPages)
-// console.log(movies)
 
 </script>
 
@@ -48,36 +59,41 @@ const rc_cont_movies = computed(() => contentStore.rcContentBasedMovies)
 <template>
   <div id="page">
     <header>
-      <p>Content Based</p>
+      <!-- <p>Content Based</p> -->
     </header>
-
-    <div class="tmdb-container">      
+    <div class="tmdb-container">
       <div>
-        <RouterLink :to="{ name:'RcContentDetailView' }" class="detail"> Detail </RouterLink>
+        <RouterLink :to="{ name:'RcContDetailView' }" class="detail"> Detail </RouterLink>
       </div>
+      
+      <!-- 로딩 상태 처리 -->
+      <div v-if="isLoading">
+        <p>Loading...</p>
+      </div>
+      
+      <!-- <h1>RcUserBookMark</h1> -->
+      <header>
+        북마크 기반의 영화 추천
+      </header>
       <div class="content">
-        <div v-if="rc_cont_movies.length !== null">
+        <!-- 북마크 추천 영화 목록 -->
+        <div v-if="!isLoading && rc_bookmark_movies.length > 0">
           <div class="movie-list">
-            <div 
-              v-for="movie in rc_cont_movies"
-              :key="movie.id"
-              class="movie-card"
-            >
-              <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.id }}">
-                <img :src="getPosterUrl(movie.poster_path, 'w300')" alt="Movie Poster" class="movie-poster">
-              </RouterLink>
-              <p><b>{{ movie.title }}</b></p>
-    
-            </div>
+            <RcUserBM 
+                v-for="movie in rc_bookmark_movies"
+                :key="movie.tmdb_id"
+                :movie="movie"
+                class="movie-card"
+            />
           </div>
         </div>
-  
-        <div v-else>
-          <p>No Movies</p>
+        
+        <!-- 북마크 추천 영화가 없을 경우 -->
+        <div v-else-if="!isLoading && rc_bookmark_movies.length === 0">
+          <p>No Bookmark Movies</p>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -87,6 +103,15 @@ header {
   font-size: 1.6rem;
   font-weight: bold;
   padding-left: 20px;
+  padding-bottom: 40px;
+}
+
+header2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding-left: 20px;
+  /* padding-top: 120px; */
+  /* padding-bottom: 40px; */
 }
 
 b {
@@ -100,7 +125,8 @@ b {
   justify-content: flex-end;
   color: aliceblue;
   font-size: 1.2rem;
-  padding-bottom: 10px;
+  /* padding-top: 120px; */
+  /* padding-bottom: 10px; */
   text-decoration: none;
   padding-right: 20px;
 }
@@ -116,7 +142,7 @@ b {
   flex-direction: column;
   overflow: hidden;
   /* min-height: 100dvh; */
-  padding-bottom: 100px;
+  /* padding-bottom: 100px; */
 /* 
   white-space: nowrap;
   overflow-x: auto;
