@@ -168,7 +168,7 @@ def mypage_recom(request):
                 "C:/Users/SSAFY/Desktop/SF12_Feelm/pjt_movie/django-pjt/movies/fixtures/movietop1.json",
                 rating_df,
                 'title', 'overview', 'original_lang', 'genre', 'keyword', 
-                2, 2, 1, 2, 1.5, 
+                3, 3, 1, 2.5, 1.5, 
                 20
             )
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
