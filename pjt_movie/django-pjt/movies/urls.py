@@ -11,7 +11,7 @@ urlpatterns = [
 
 
   # 로그인 후 메인 화면
-  # path('', views.main, name='main'),
+  path('genre/', views.genre, name='genre'),
 
   # movie_list화면
   path('', views.movie_list, name='movie_list'),
