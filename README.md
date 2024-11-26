@@ -13,15 +13,16 @@ pjt10
 - __CSS__  
 
 ### 사용 기술
-- Python   
-<img src="pic/pngwing.com-1.png" width="400" height="120">
+- Python 
 - Django  
-<img src="pic/django-logo-negative.png" width="190" height="100">
 - JavaScript  
-<img src="pic/js2.png" width="150" height="150">
 - Vue.js  
-<img src="pic/vue.png" width="260" height="150">
-
+- Node.js  
+<img src="pic/pngwing.com-1.png" width="200" height="60">
+<img src="pic/django-logo-negative.png" width="190" height="100">  
+<img src="pic/js2.png" width="150" height="150">
+<img src="pic/vue.png" width="170" height="100">
+<img src="pic/nodejs.png" width="200" height="130">
 
 
 ## 2. 목표 서비스 :dart:
@@ -40,7 +41,7 @@ pjt10
 - 구현 정도 : 100%
 ### 2-3. 평론 :newspaper:
 - 상세 서비스
-    - 나만의 영화 평론 일지
+    - 나만의 영화 감상평
         - 영화 선택 후 평론 작성
 - 구현 정도 : 100%
 ### 2-4. 영화 추천 서비스 :sparkler:
@@ -97,7 +98,8 @@ pjt10
     - 영화 별 유사도
     - 북마크
     - 리뷰 평점
-    - 
+
+
 
 ## 6. 생성형 AI 
 
