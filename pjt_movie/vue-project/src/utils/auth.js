@@ -73,4 +73,5 @@ export const loginUser = async (username, password) => {
 export const logoutUser = () => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
+  localStorage.removeItem('user');
 };

@@ -40,6 +40,7 @@ class Movie(models.Model):
 
 
 
+
 # 리뷰 모델
 class Review(models.Model):
     user = models.ForeignKey('accounts.User', related_name='reviews', on_delete=models.CASCADE)
@@ -48,14 +49,15 @@ class Review(models.Model):
     like_reviews = models.ManyToManyField('accounts.User', related_name='like_reviews', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    rating = models.FloatField(
-        choices=[
-            (0.0, '0'), (0.5, '0.5'), 
-            (1.0, '1'), (1.5, '1.5'),
-            (2.0, '2'), (2.5, '2.5'),
-            (3.0, '3'), (3.5, '3.5'),
-            (4.0, '4'), (4.5, '4.5'),
-            (5.0, '5')
-        ],
-        default=0.0
-    )
+    rating = models.FloatField()
+    # rating = models.FloatField(
+    #     choices=[
+    #         (0.0, '0'), (0.5, '0.5'), 
+    #         (1.0, '1'), (1.5, '1.5'),
+    #         (2.0, '2'), (2.5, '2.5'),
+    #         (3.0, '3'), (3.5, '3.5'),
+    #         (4.0, '4'), (4.5, '4.5'),
+    #         (5.0, '5')
+    #     ],
+    #     default=0.0
+    # )

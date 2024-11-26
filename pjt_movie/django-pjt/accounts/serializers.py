@@ -24,6 +24,16 @@ class MovieSerializer(serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
             
     class ReviewSerializer(serializers.ModelSerializer):
+        class MovieSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = Movie
+                fields = (
+                    'title',
+                    'tmdb_id',
+                    'poster_path',
+                )
+        movie = MovieSerializer(read_only=True)
+
         class Meta:
             model = Review
             fields = (

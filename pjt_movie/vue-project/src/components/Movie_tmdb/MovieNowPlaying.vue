@@ -72,7 +72,9 @@ const totalPages = computed(() => movieStore.np_totalPages)
               :key="movie.id"
               class="movie-card"
             >
+            <RouterLink :to="{ name: 'MovieDetailView', params:{ id: movie.id }}">
               <img :src="getPosterUrl(movie.poster_path, 'original')" alt="Movie Poster" class="movie-poster">
+            </RouterLink>
               <p><b>{{ movie.title }}</b></p>
     
             </div>

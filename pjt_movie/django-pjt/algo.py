@@ -13,7 +13,7 @@ def load_movie_data(json_file_path):
     movies_df = pd.DataFrame([item['fields'] for item in data])
     return movies_df
 
-movies_df = load_movie_data(r"C:\Users\lyw\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json")
+movies_df = load_movie_data(r"C:\Users\SSAFY\Desktop\SF12_Feelm\pjt_movie\django-pjt\movies\fixtures\movietop1.json")
 
 # 추천 알고리즘
 def calculate_combined_weighted_similarity(movies_df, field1, field2, field3, field4, field5, weight1, weight2, weight3, weight4, weight5):
