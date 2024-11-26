@@ -17,7 +17,6 @@ export const useUserStore = defineStore('user', () => {
   const userInfo = ref(null) // 초기값을 null로 설정하여 로딩 상태와 구별
   const isLoading = ref(true) // 로딩 상태를 관리할 변수
   const error = ref(null) // 에러 상태를 관리할 변수
-  const errorMessage = ref('');
 
   const getUserInfo = async () => {
     if (!token) {
@@ -47,44 +46,12 @@ export const useUserStore = defineStore('user', () => {
     getUserInfo() // 컴포넌트가 마운트될 때 유저 정보 로드
   }
 
-
-  const updateUserInfo = async (formData) => {
-    try{
-      const response = await axios ({
-        method: 'patch',
-        url: `${DB_BASE_URL}/accounts/update/`,
-        data: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      console.log('유저정보 업데이트 성공:', response.data);
-      router.push({name : 'MyPageView'})
-    } catch (error) {
-      // 에러가 axios response 객체를 포함하고 있는지 확인
-      if (error.response && error.response.data && error.response.data.errors) {
-        // 서버에서 반환한 에러 메시지를 상태에 저장
-        errorMessage.value = error.response.data.errors[0];
-      } else {
-        // 네트워크 오류 또는 예상치 못한 오류 처리
-        errorMessage.value = '정보 업데이트에 실패했습니다. 다시 시도해주세요.';
-      }
-
-      // 에러를 상위로 전달
-      throw error;
-    }
-  }
-
   return {
     DB_BASE_URL,
     userInfo,
     isLoading,
     error,
-    errorMessage,
-    getUserInfo,
-    updateUserInfo,
+    getUserInfo
   }
 }, { persist: true })
     

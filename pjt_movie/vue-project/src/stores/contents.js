@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-import { useCounterStore } from './counter'
+import { useCounterStore } from '@/stores/counter'
 
 
 export const useContentStore = defineStore('contents', () => {
@@ -20,9 +20,51 @@ export const useContentStore = defineStore('contents', () => {
   const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN
   // console.log(import.meta.env.VITE_TMDB_TOKEN)
 
+  let bookmarkList = ref([])
+
+  const addToBookmark = async (movie) => {
+    const movie_id = movie.tmdb_id
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `${DB_BASE_URL}/api/v1/movies/${movie_id}/bookmark/`,
+        data: {
+          tmdb_id: movie_id,
+        },
+        headers: {
+          Authorization: `Bearer ${useStore.token}`
+        }
+      })
+      // console.log(response.data)
+      if (response.data.message === '북마크 성공'){
+        bookmarkList.value.push(movie)
+
+      } else if (response.data.message === '북마크 취소 성공'){
+        bookmarkList.value = bookmarkList.value.filter(item => item.tmdb_id !== movie_id);
+      }
+
+      // Log the updated state for debugging
+      console.log('Updated bookmark list:', bookmarkList.value);
+      console.log('Updated isBookmarked:', isBookmarked.value);
+
+      // isBookmark.value = 1
+      // bookmarkLists.value.push(re)
+    } catch (err) {
+      console.error('Error:', err)
+    }
+  }
+
+  // 영화가 북마크에 있는지 확인
+  const isBookmarked = (movie_id) => {
+    return bookmarkList.value.some(movie => movie.tmdb_id === movie_id)
+  }
 
 
   return {
+    bookmarkList,
+    addToBookmark,
+    isBookmarked
   }
 
 }, { persist: true })

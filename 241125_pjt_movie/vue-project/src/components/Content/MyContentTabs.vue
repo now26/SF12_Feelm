@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';  // Vue 3에서 Composition API를 사용하려면 ref와 computed를 import
 
-import MyBookMarksList from '@/components/User/MyBookMarksList.vue';
+import MyBookMarks from '@/components/User/MyBookMarks.vue';
 import MyContents from '@/components/User/MyContents.vue';
 
 // `tabs`는 탭 목록을 배열로 정의
@@ -22,7 +22,7 @@ const setCurrentTab = (tab) => {
 // 현재 탭에 맞는 컴포넌트를 반환하는 계산된 속성 (computed)
 
 const currentTabComponent = computed(() => {
-    if (currentTab.value === 'BookMarks') return MyBookMarksList
+    if (currentTab.value === 'BookMarks') return MyBookMarks
     if (currentTab.value === 'MyContents') return MyContents
 })
 

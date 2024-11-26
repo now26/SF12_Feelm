@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue';  // Vue 3에서 Composition API�
 
 import UserInfo from '@/components/User/UserInfo.vue';
 import Review from '@/components/User/Review.vue';
-import MyBookMarks from '@/components/User/MyBookMarks.vue';
+import MyBookMarksList from '@/components/User/MyBookMarksList.vue';
 import MyContents from '@/components/User/MyContents.vue';
 
 // `tabs`는 탭 목록을 배열로 정의
@@ -26,7 +26,7 @@ const setCurrentTab = (tab) => {
 const currentTabComponent = computed(() => {
     if (currentTab.value === 'MyInfo') return UserInfo
     if (currentTab.value === 'Reviews') return Review
-    if (currentTab.value === 'BookMarks') return MyBookMarks
+    if (currentTab.value === 'BookMarks') return MyBookMarksList
     if (currentTab.value === 'MyContents') return MyContents
 })
 

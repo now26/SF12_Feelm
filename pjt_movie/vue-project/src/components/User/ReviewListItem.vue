@@ -1,5 +1,11 @@
 <script setup>
+import { defineEmits } from 'vue';
 import { RouterLink } from 'vue-router';
+import axios from 'axios'
+import { useCounterStore } from '@/stores/counter';
+
+const emit = defineEmits()
+const useStore = useCounterStore()
 
 defineProps({
   review:Object
@@ -12,18 +18,40 @@ const getPosterUrl = (posterPath, imageSize) => {
   }
 }
 
+const deleteReview = (tmdb_id, review_id) => {
+  console.log('리뷰삭제 버튼') // 디버깅
+
+  axios({
+    method: 'delete',
+    url: `${useStore.API_URL}/api/v1/movies/${tmdb_id}/${review_id}`,
+    headers: {
+      Authorization: `Bearer ${useStore.token}`,
+    }
+  })
+  .then((res) => {
+    console.log(res, '리뷰삭제 성공')
+    alert('리뷰삭제 성공')
+    emit('deleteReview', review_id)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
+
 </script>
 
 
 <template>
   <div>
     <ul>
+      {{ review }}
       <RouterLink :to="{ name: 'MovieDetailView', params:{ id: review.movie.tmdb_id }}">
         <img :src="getPosterUrl(review.movie.poster_path, 'w300')" alt="poster_img">
       </RouterLink>
       <p>Movie : {{ review.movie.title }}</p>
       <p>Contents : {{ review.content }}</p>
       <p>Ratings : {{ review.rating }}</p>
+      <button @click.prevent="deleteReview(review.movie.tmdb_id, review.id)">리뷰 삭제</button>
     </ul>
     <hr>
   </div>

@@ -4,17 +4,12 @@ import { useCounterStore } from '@/stores/counter'
 import MyPageView from '@/views/User/MyPageView.vue'
 import UserInfoView from '@/views/User/UserInfoView.vue'
 import UserInfo from '@/components/User/UserInfo.vue'
-import UpdateUserInfoView from '@/views/User/UpdateUserInfoView.vue'
 
 import ReviewView from '@/views/User/ReviewView.vue'
 import ReviewDetailView from '@/views/User/ReviewDetailView.vue'
 import ReviewList from '@/components/User/ReviewList.vue'
-import ReviewCreateView from '@/views/User/ReviewCreateView.vue'
+import ReviewCreateView from '@/views/Review/ReviewCreateView.vue'
 
-import DiaryCreateView from '@/views/User/DiaryCreateView.vue'
-import DiaryDetailView from '@/views/User/DiaryDetailView.vue'
-
-import BookmarkDetailView from '@/views/User/BookmarkDetailView.vue'
 
 import TabsView from '@/views/TabsView.vue'
 
@@ -31,11 +26,6 @@ const userRouter = createRouter({
       path: '/mypage/myinfo',
       name: 'UserInfo',
       component: UserInfo
-    },
-    {
-      path: '/mypage/myinfo/update',
-      name: 'UpdateUserInfoView',
-      component: UpdateUserInfoView
     },
     {
       path: '/review',
@@ -56,21 +46,6 @@ const userRouter = createRouter({
       path: '/review/create',
       name: 'ReviewCreateView',
       component: ReviewCreateView
-    },
-    {
-      path: '/mypage/diary',
-      name: 'DiaryCreateView',
-      component: DiaryCreateView
-    },
-    {
-      path: '/mypage/diary',
-      name: 'DiaryDetailView',
-      component: DiaryDetailView
-    },
-    {
-      path: '/movies/bookmark',
-      name: 'BookmarkDetailView',
-      component: BookmarkDetailView
     }
 
   ],

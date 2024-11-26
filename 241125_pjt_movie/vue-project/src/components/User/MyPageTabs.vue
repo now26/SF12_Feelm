@@ -1,16 +1,18 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';  // Vue 3에서 Composition API를 사용하려면 ref와 computed를 import
 
-import MyBookMarksList from '@/components/User/MyBookMarksList.vue';
+import UserInfo from '@/components/User/UserInfo.vue';
+import Review from '@/components/User/Review.vue';
+import MyBookMarks from '@/components/User/MyBookMarks.vue';
 import MyContents from '@/components/User/MyContents.vue';
 
 // `tabs`는 탭 목록을 배열로 정의
-const tabs = ['BookMarks', 'MyContents']
+const tabs = ['MyInfo', 'Reviews', 'BookMarks', 'MyContents']
 
 // 로컬스토리지에서 저장된 탭 상태를 가져오기. 없으면 기본값 'MyInfo'
 const savedTab = localStorage.getItem('currentTab')
-// 현재 선택된 탭을 `ref`로 정의 (초기값은 'BookMarks')
-const currentTab = ref(savedTab || 'BookMarks')
+// 현재 선택된 탭을 `ref`로 정의 (초기값은 'MyInfo')
+const currentTab = ref(savedTab || 'MyInfo')
 
 // 탭을 클릭할 때 선택된 탭을 설정하는 함수
 const setCurrentTab = (tab) => {
@@ -22,7 +24,9 @@ const setCurrentTab = (tab) => {
 // 현재 탭에 맞는 컴포넌트를 반환하는 계산된 속성 (computed)
 
 const currentTabComponent = computed(() => {
-    if (currentTab.value === 'BookMarks') return MyBookMarksList
+    if (currentTab.value === 'MyInfo') return UserInfo
+    if (currentTab.value === 'Reviews') return Review
+    if (currentTab.value === 'BookMarks') return MyBookMarks
     if (currentTab.value === 'MyContents') return MyContents
 })
 

@@ -4,9 +4,7 @@ import { onMounted } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router'
 
-import MyPageNavbar from '@/components/Common/MyPageNavbar.vue';
-
-import MyPageTabs from '@/components/User/MyPageTabs.vue';
+import MyContentTabs from '@/components/Content/MyContentTabs.vue';
 
 onBeforeRouteLeave((to, from, next) => {
   // console.log('MyComponent 컴포넌트에서 떠날 때');
@@ -31,9 +29,16 @@ onMounted(() => {
 <template>
   <div>
     <div>
-        <MyPageTabs />
-      </div>
+      <MyContentTabs />
+      <!-- <div v-if="userStore.isLoading">Loading...</div> -->
+      <!-- <div v-if="userStore.error">{{ userStore.error }}</div> -->
+      <!-- <div v-else> -->
+        <!-- 유저 정보가 정상적으로 로딩되었을 때 표시 -->
+        <!-- <p>User Info: {{ userStore.userInfo }}</p> -->
+      <!-- </div> -->
     </div>
+
+  </div>
 </template>
 
 

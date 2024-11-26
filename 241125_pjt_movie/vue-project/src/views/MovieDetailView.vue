@@ -1,29 +1,22 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import axios from 'axios';
 
 import { useCounterStore } from '@/stores/counter';
 import { useMovieStore } from '@/stores/movies';
-import { useContentStore } from '@/stores/contents';
 
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { RouterLink } from 'vue-router'
 
 // 날짜 형식 변경
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 
-import MovieReviews from '@/components/Movie_tmdb/MovieReviews.vue';
-
 const useStore = useCounterStore()
 const movieStore = useMovieStore()
-const contentStore = useContentStore()
-
 const route = useRoute()
-const router = useRouter()
 
-const movieDetail = ref(null)
-const isBookmarked = ref(false)
+const movieDetail = ref('')
 
 onMounted(() => {
   // console.log("토큰: ", useStore.token)
@@ -37,33 +30,17 @@ onMounted(() => {
   })
   .then((res) => {
     movieDetail.value = res.data
-    checkBookmarkStatus(res.data.movie_detail.tmdb_id);  // 데이터 로딩 후 북마크 상태 확인
+    // console.log(res.data.movie_detail)
   })
   .catch((err) => {
     console.log(err)
   })
-
 })
 
 const formateDate = (dateString) => {
   const date = new Date(dateString)
   return format(date, 'yyyy년 MM월 dd일', { locale: ko }) // 한국 날짜 형식으로 변환
 }
-
-
-
-// 해당 영화의 북마크 상태 추적
-const checkBookmarkStatus = (movieId) => {
-  // 북마크 리스트에서 해당 영화 ID가 있는지 확인
-  isBookmarked.value = contentStore.bookmarkList.some(movie => movie.tmdb_id === movieId)
-}
-
-// 북마크 추가 또는 취소
-const toggleBookmark = (movie) => {
-  contentStore.addToBookmark(movie); // 북마크 추가
-  checkBookmarkStatus(movie.tmdb_id); // 북마크 상태를 갱신
-};
-
 
 </script>
 
@@ -74,23 +51,12 @@ const toggleBookmark = (movie) => {
     {{ movieDetail }}
   </pre> 
   -->
+ 
   <!-- {{ movieDetail }} -->
   <!-- {{ movieDetail !== null }} -->
+  <!-- {{ movieDetail.movie_recommend }} -->
 
   <h1>Movie Detail</h1>
-
-  <div v-if="movieDetail && movieDetail.movie_detail">
-    <button @click="toggleBookmark(movieDetail.movie_detail)">
-      {{ isBookmarked ? '북마크 취소' : '북마크 추가'}}
-    </button>
-  </div>
-
-  <div v-if="movieDetail && movieDetail.movie_detail">
-    <router-link 
-      :to="{name: 'DiaryCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}">
-      일기쓰기
-    </router-link>
-  </div>
   
   <div v-if="movieDetail && movieDetail.movie_detail">
     <h1>{{ movieDetail.movie_detail.title }}</h1>
@@ -119,12 +85,7 @@ const toggleBookmark = (movie) => {
   <br>
   <h1>Reviews</h1>
   <div  v-if="movieDetail && movieDetail.movie_detail">
-    <!-- <MovieReviews :movie_db="JSON.stringify(movieDetail.movie_detail)" /> -->
-    <MovieReviews 
-      :movie_tmdb_id="movieDetail.movie_detail.tmdb_id"
-      :movie_reviews="movieDetail.movie_detail.reviews" 
-    />
-    <!-- <div>
+    <div>
       <router-link 
         :to="{name: 'ReviewCreateView', query: {movie_db: JSON.stringify(movieDetail.movie_detail)}}">
         Create
@@ -135,7 +96,7 @@ const toggleBookmark = (movie) => {
       <pre>
         {{ movieDetail.movie_detail.reviews }}
       </pre>
-    </p> -->
+    </p>
   </div>
 
   <br>

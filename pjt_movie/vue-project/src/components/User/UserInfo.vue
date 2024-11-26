@@ -51,7 +51,7 @@ const profileImageUrl = computed(() => {
           <p class="info">age : {{ userDB.age }}</p>
           <p class="info">gender : {{ userDB.gender }}</p>
         
-          <router-link >회원정보 변경</router-link>
+          <router-link :to="{name : 'UpdateUserInfoView'}" >회원정보 변경</router-link>
         </div>
       </div>
 

@@ -31,9 +31,27 @@ onMounted(() => {
 <template>
   <div>
     <div>
+      <div v-if="userStore.isLoading">Loading...</div>
+      <div v-if="userStore.error">{{ userStore.error }}</div>
+      <div v-else>
         <MyPageTabs />
+        <!-- 유저 정보가 정상적으로 로딩되었을 때 표시 -->
+        <!-- <p>User Info: {{ userStore.userInfo }}</p> -->
       </div>
     </div>
+
+
+
+
+    <!-- <MyPageTabs /> -->
+
+    <!-- <h1>My Page</h1> -->
+    <!-- <TabsView /> -->
+    <!-- <UserInfo />
+    <MyPageNavbar />
+    <UserInfoView /> -->
+    <!-- <Review /> -->
+  </div>
 </template>
 
 
