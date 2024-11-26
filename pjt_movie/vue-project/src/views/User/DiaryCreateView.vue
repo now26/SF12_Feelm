@@ -19,6 +19,8 @@ const movieDB = JSON.parse(route.query.movie_db || '{}')
 const title = ref('')
 const content = ref('')
 
+const diary_id = ref(0)
+
 const tmdb_id = movieDB.tmdb_id
 
 // console.log(typeof movieDB.tmdb_id)
@@ -45,15 +47,17 @@ const createDiary = () => {
       }
   })
   .then((res) => {
-      console.log(res)
-      router.push({name : 'DiaryDetailView'}) //DetailView 보내는 건 고민해보기
+    if (res.data && res.data.id) {
+      diary_id.value = res.data.id; // 생성된 다이어리 ID 설정
+      router.push({ name: 'DiaryDetailView', params: { diary_id: diary_id.value } }) // 다이어리 상세 페이지로 이동
+    }
   })
   .catch((err) => {
-      console.log(err)
+    // 에러 발생 시 사용자에게 알림
+    console.error('다이어리 생성 오류:', err)
+    alert('다이어리 생성에 실패했습니다. 다시 시도해주세요.')
   })
 }
-
-
 </script>
 
 

@@ -80,7 +80,9 @@ router.beforeEach((to, from) => {
     return true
   }
 
-  if (to.name === 'ArticleView' && !useStore.isLogin){
+  // if (to.name === 'HomeView')
+
+  if (!useStore.isLogin && to.name === 'ArticleView'){
     window.alert('로그인이 필요합니다.')
     return { name: 'LogInView' }
   }

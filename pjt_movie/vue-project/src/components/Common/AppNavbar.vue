@@ -21,6 +21,7 @@ const logout = () => {
         <RouterLink :to="{name: 'HomeView'}">Home</RouterLink>
         <RouterLink :to="{name: 'MovieView'}">Movies</RouterLink>
         <RouterLink :to="{name: 'MovieTmdbView'}">TMDB</RouterLink>
+        <RouterLink :to="{name: 'RecommendView'}">Recommend</RouterLink>
         <RouterLink :to="{name: 'ArticleView'}">Articles</RouterLink>
         <RouterLink :to="{name: 'MyContentView'}">Contents</RouterLink>
       </span>
