@@ -61,10 +61,35 @@ export const useContentStore = defineStore('contents', () => {
   }
 
 
+  const diary_db = ref([])
+  const getDiaryList = function() {
+
+    axios({
+      method: 'get',
+      url: `${DB_BASE_URL}/accounts/mypage/diary/`,
+      headers: {
+        Authorization: `Bearer ${useStore.token}`
+      }
+    })
+    .then((res) => {
+      // console.log(res)
+      diary_db.value = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+
   return {
     bookmarkList,
+
+    diary_db,
+
     addToBookmark,
-    isBookmarked
+    isBookmarked,
+
+    getDiaryList,
   }
 
 }, { persist: true })

@@ -46,7 +46,7 @@ const createDiary = () => {
   })
   .then((res) => {
       console.log(res)
-      router.push({name : 'DiaryDetailView'}) //DetailView 보내는 건 고민해보기
+      router.push({name : 'DiaryDetailView', params: { id: id }}) //DetailView 보내는 건 고민해보기
   })
   .catch((err) => {
       console.log(err)
