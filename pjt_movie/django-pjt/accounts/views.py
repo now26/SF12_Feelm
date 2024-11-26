@@ -151,16 +151,10 @@ def mypage_recom(request):
             rating.append(review['rating'])
             tmdb = Movie.objects.get(id=review['movie_id'])
             tmdb_id.append(tmdb)
-        # print(movie_id)
-        rating_df = pd.DataFrame({
-            'movie_id':movie_id,
-            'tmdb_id':tmdb_id,
-            'rating':rating,
-        })
-        # print(rating_df[['movie_id']])
+
+        rating_df = pd.DataFrame({'movie_id':movie_id, 'tmdb_id':tmdb_id, 'rating':rating})
 
         if rating_df.empty:
-            # rating_rec = movies_df.nlargest(20, 'vote_avg')[['tmdb_id', 'title']]
             rating_rec = movies_df[movies_df['vote_avg'] >= 7].sample(n=20)[['tmdb_id', 'title']]
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec['tmdb_id'].tolist())
         else:
@@ -172,10 +166,9 @@ def mypage_recom(request):
                 20
             )
             rating_recom = Movie.objects.filter(tmdb_id__in=rating_rec)
-        # print(rating_recom)
+
         # 북마크 기반 추천
         bookmark_list = list(request.user.bookmark.all().values())
-        # print(bookmark_list)
         # DataFrame 생성
         bookmark = pd.DataFrame(bookmark_list)
 
@@ -191,15 +184,11 @@ def mypage_recom(request):
                 20
             )
             movies_recom = Movie.objects.filter(tmdb_id__in=movies_rec)
-            
-
-        # print(serializer_bookmark.data)
         
         serializer_bookmark = MovieListSerializer(movies_recom, many=True)
         serializer_rating = MovieListSerializer(rating_recom, many=True)
         return Response({'review_recommendations':serializer_rating.data, 'bookmark_reccomendations': serializer_bookmark.data})
-        # return Response(serializer_bookmark.data)
-        
+
 
 # 일기 목록, 작성
 @api_view(['GET', 'POST'])

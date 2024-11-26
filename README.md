@@ -14,15 +14,16 @@ pjt10
 
 ### 사용 기술
 - Python   
-<img src="pic/pngwing.com-1.png" width="400" height="120">
 - Django  
-<img src="pic/django-logo-negative.png" width="190" height="100">
 - JavaScript  
-<img src="pic/js2.png" width="150" height="150">
 - Vue.js  
-<img src="pic/vue.png" width="260" height="150">
+- Node.js
 
-
+<img src="pic/pngwing.com-1.png" width="200" height="60">
+<img src="pic/django-logo-negative.png" width="190" height="100">  
+<img src="pic/js2.png" width="150" height="150">
+<img src="pic/vue.png" width="170" height="100">
+<img src="pic/nodejs.png" width="200" height="130">
 
 ## 2. 목표 서비스 :dart:
 ### 2-1. 영화 일반 :clapper:
@@ -40,8 +41,8 @@ pjt10
 - 구현 정도 : 100%
 ### 2-3. 평론 :newspaper:
 - 상세 서비스
-    - 나만의 영화 평론 일지
-        - 영화 선택 후 평론 작성
+    - 나만의 영화 감상평
+        - 영화 선택 후 감상평 작성
 - 구현 정도 : 100%
 ### 2-4. 영화 추천 서비스 :sparkler:
 - 상세 서비스
@@ -92,13 +93,33 @@ pjt10
 
 
 ## 5. 핵심 기능
-- 추천 기능
+- 영화 추천
   - 다양한 추천 방식
     - 영화 별 유사도
     - 북마크
     - 리뷰 평점
-    - 
+
 
 ## 6. 생성형 AI 
 
 ## 7. 후기
+### 박수연
+```
+백엔드 개발자를 맡아 프로젝트에 전념한 것은 이번이 처음이라 많이 버벅거렸지만,
+기능 설계부터 차근차근 설계해나가며 서비스를 구현할 수 있던 점이 뿌듯했다.
+
+이번 기회에 Django를 다루는 데에 있어서 어색했던 부분, 
+특히나 커스텀 모델과 serializer에 대한 사용법을 확실히 익혔다.
+어떻게 데이터를 보내야 하고, 또 어떤 데이터를 보내야 하는지에 대한 고민을 많이 했다.
+그 과정에서 팀원과의, 특히나 프론트와의 소통, 의논이 제일 중요하다는 점을 느꼈다.
+바로 옆에 앉아서 조금이라도 알기 어려운 부분에 대해 상의하며 프로젝트를 진행할 수 있어서 다행이었다고 생각한다.
+
+이전의 관통 프로젝트들과는 다르게 프로젝트의 크기와 규모가 커지다보니, 
+이를 관리하고 보수하는 것이 중요하다고 느꼈다.
+그래서 초반에 시행착오를 많이 겪으며 어떻게 해야지 더 편리한 구조를 짤 수 있는지에 대해 고민하고 실습해볼 수 있었다.
+```
+
+### 이예원
+```
+
+```
