@@ -22,7 +22,7 @@ onMounted(async () => {
     // API 요청을 보내고, 응답 받은 데이터 바로 배열에 할당
     const response = await axios({
       method: 'get',
-      url: `${DB_BASE_URL}/accounts/mypage/recom/`,
+      url: `${DB_BASE_URL}/accounts/mypage/recom1/`,
       headers: {
         accept: 'application/json',
         Authorization: `Bearer ${useStore.token}`,
@@ -32,8 +32,8 @@ onMounted(async () => {
     console.log("API response:", response.data);  // 응답을 확인
 
     // 응답 받은 데이터를 배열에 바로 할당
-    rc_bookmark_movies.value = response.data?.bookmark_reccomendations || []
-    rc_review_movies.value = response.data?.review_recommendations || []
+    rc_bookmark_movies.value = response.data || []
+    rc_review_movies.value = response.data || []
 
   } catch (err) {
     console.error('Error fetching recommendations:', err)
@@ -62,9 +62,9 @@ const getBackDrop = (backDropPath, imageSize) => {
       <!-- <p>Content Based</p> -->
     </header>
     <div class="tmdb-container">
-      <div>
+      <!-- <div>
         <RouterLink :to="{ name:'RcContDetailView' }" class="detail"> Detail </RouterLink>
-      </div>
+      </div> -->
       
       <!-- 로딩 상태 처리 -->
       <div v-if="isLoading">
@@ -100,99 +100,49 @@ const getBackDrop = (backDropPath, imageSize) => {
 
 <style scoped>
 header {
+  display: flex;
+  justify-content: center;
   font-size: 1.6rem;
   font-weight: bold;
   padding-left: 20px;
   padding-bottom: 40px;
 }
 
-header2 {
-  font-size: 1.6rem;
+h1 {
   font-weight: bold;
-  padding-left: 20px;
-  /* padding-top: 120px; */
-  /* padding-bottom: 40px; */
-}
-
-b {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 10px;
-}
-
-.detail {
-  display: flex;
-  justify-content: flex-end;
-  color: aliceblue;
-  font-size: 1.2rem;
-  /* padding-top: 120px; */
-  /* padding-bottom: 10px; */
-  text-decoration: none;
-  padding-right: 20px;
-}
-
-.detail:hover{
-  color: rgb(0, 68, 255)
-}
-
-.tmdb-container{
-  /* background-color: aqua; */
-  /* min-width: 100%; */
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  /* min-height: 100dvh; */
-  /* padding-bottom: 100px; */
-/* 
-  white-space: nowrap;
-  overflow-x: auto;
-  */
-}
-
-.content {
-  display: flex;
-  /* background-color: bisque; */
-  width: 100%;
-  overflow: hidden;
-  /* box-sizing: border-box; */
+  font-size: 2.5rem;
+  padding-bottom: 50px;
 }
 
 .movie-list {
+  /* display: flex; -> 요소 가로로 위치 */
   display: flex;
-  /* background-color: aqua; */
-  padding-left: 20px;
-  white-space: nowrap;
-  overflow-x: scroll;
-  width: 100dvw;
-  /* padding: 20px;  */
+  flex-wrap: wrap;
   gap: 10px;
+  padding-left: 1rem;
+  justify-content: center;
 }
 
-/* Webkit 기반 브라우저 (Chrome, Safari 등) */
-/* 스크롤바 디자인 */
-.movie-list::-webkit-scrollbar {
-  width: 10px; /* 스크롤바의 너비 */
-}
+.movie-card {
+  /* border: 1px solid #fff; */
+  border: 1px none;
+  padding: 5px;
 
-.movie-list::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1); /* 스크롤바의 배경 색상 */
-  border-radius: 10px; /* 트랙에 둥근 모서리 적용 */
-}
-
-.movie-list::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.5); /* 스크롤바의 thumb 색상 */
-  border-radius: 10px; /* thumb에 둥근 모서리 적용 */
-}
-
-.movie-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.8); /* thumb에 hover 효과 적용 */
 }
 
 .movie-poster {
-  flex-shrink: 1; 
+  flex-shrink: 1;
   width: 200px;
   height: 300px;
   border-radius: 10px;
+
+}
+
+.movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
 }
 
 </style>

@@ -10,6 +10,7 @@ const userStore = useUserStore()
 
 import MoviePopular from '@/components/Movie_tmdb/MoviePopular.vue'
 import RcUserDetail from '@/components/Content/RcUserDetail.vue';
+import MovieUpComing from '@/components/Movie_tmdb/MovieUpComing.vue';
 
 const movieStore = useMovieStore()
 
@@ -108,8 +109,9 @@ function moveSlide(direction){
     </div>
 
     <MoviePopular/>
+    <MovieUpComing />
 
-    <RcUserDetail/> 
+    <!-- <RcUserDetail/>  -->
     
 
   </div>

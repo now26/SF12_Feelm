@@ -133,4 +133,16 @@ b {
   border-radius: 10px;
 }
 
+/* .movieInfo {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+} */
+p {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
 </style>

@@ -128,4 +128,11 @@ b {
   border-radius: 10px;
 }
 
+p {
+  width: 200px;
+  white-space: normal;
+  display: flex;
+  justify-content: center;
+}
+
 </style>

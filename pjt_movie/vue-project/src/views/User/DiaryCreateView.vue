@@ -92,11 +92,11 @@ const createDiary = () => {
 
 
     <br><hr><br>
-
+<!-- 
     Movie DB : 
     <pre>
         {{ movieDB }}
-    </pre>
+    </pre> -->
     </div>
 
   </div>

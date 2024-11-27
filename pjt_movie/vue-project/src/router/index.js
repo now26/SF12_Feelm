@@ -88,7 +88,7 @@ router.beforeEach((to, from) => {
   }
 
   if ((to.name === 'SignUpView' || to.name ==='LogInView') && (useStore.isLogin)){
-    window.alert('이미 로그인 되어있습니다.')
+    // window.alert('이미 로그인 되어있습니다.')
     // return { name: 'HomeView' }
     return { name: from.name } // 현재 페이지 잔류
   }

@@ -22,7 +22,7 @@ const contentRouter = createRouter({
       component: RecommendView
     },
     {
-      path: '/movie/recommend/content-based',
+      path: '/movie/recommend/bookmark-based',
       name: 'RcContentDetailView',
       component: RcContentDetailView
     },
